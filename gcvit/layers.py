@@ -73,3 +73,40 @@ class SE(tf.keras.layers.Layer):
             'oup': self.oup,
             })
         return config
+
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
+class ReduceSize(tf.keras.layers.Layer):
+    def __init__(self, keep_dim=False, **kwargs):
+        super().__init__(**kwargs)
+        self.keep_dim = keep_dim
+
+    def build(self, input_shape):
+        dim = input_shape[-1]
+        dim_out = dim if self.keep_dim else 2*dim
+        self.pad = tf.keras.layers.ZeroPadding2D(1, name='pad')
+        self.conv = tf.keras.Sequential([
+            tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
+            tf.keras.layers.Activation('gelu', name='conv/1'),
+            SE(name='conv/2'),
+            tf.keras.layers.Conv2D(dim, kernel_size=1, strides=1, padding='valid', use_bias=False, name='conv/3')
+        ])
+        self.reduction = tf.keras.layers.Conv2D(dim_out, kernel_size=3, strides=2, padding='valid', use_bias=False,
+                                                name='reduction')
+        self.norm1 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm1')  # eps like PyTorch
+        self.norm2 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm2')
+        super().build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        x = self.norm1(inputs)
+        x = x + self.conv(self.pad(x))  # if pad had weights it would've thrown error with .save_weights()
+        x = self.reduction(self.pad(x))
+        x = self.norm2(x)
+        return x
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "keep_dim":self.keep_dim,
+        })
+        return config
