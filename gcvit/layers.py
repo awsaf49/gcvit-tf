@@ -1,4 +1,5 @@
 import tensorflow as tf
+import tensorflow_addons as tfa
 from tensorflow import keras
 
 
@@ -22,12 +23,12 @@ class MLP(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
-        outputs = self.fc1(inputs)
-        outputs = self.act(outputs)
-        outputs = self.drop(outputs)
-        outputs = self.fc2(outputs)
-        outputs = self.drop(outputs)
-        return outputs
+        x = self.fc1(inputs)
+        x = self.act(x)
+        x = self.drop(x)
+        x = self.fc2(x)
+        x = self.drop(x)
+        return x
 
     def get_config(self):
         config = super().get_config()
@@ -36,5 +37,39 @@ class MLP(tf.keras.layers.Layer):
             "out_features":self.out_features, 
             "act_layer":self.act_layer,
             "drop":self.drop_rate
+            })
+        return config
+
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
+class SE(tf.keras.layers.Layer):
+    def __init__(self, oup=None, expansion=0.25, **kwargs):
+        super().__init__(**kwargs)
+        self.expansion = expansion
+        self.oup = oup
+
+    def build(self, input_shape):
+        inp = input_shape[-1]
+        self.oup = self.oup or inp
+        self.avg_pool = tfa.layers.AdaptiveAveragePooling2D(1, name="avg_pool")
+        self.fc = tf.keras.Sequential([
+            tf.keras.layers.Dense(int(inp * self.expansion), use_bias=False, name='fc/0'),
+            tf.keras.layers.Activation('gelu', name='fc/1'),
+            tf.keras.layers.Dense(self.oup, use_bias=False, name='fc/2'),
+            tf.keras.layers.Activation('sigmoid', name='fc/3')
+        ])
+        super().build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        b, _, _, c = tf.shape(inputs)
+        x = tf.reshape(self.avg_pool(inputs), (b, c))
+        x = tf.reshape(self.fc(x), (b, 1, 1, c))
+        return x*inputs
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'expansion': self.expansion,
+            'oup': self.oup,
             })
         return config
