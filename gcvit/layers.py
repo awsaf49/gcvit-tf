@@ -133,3 +133,38 @@ class PatchEmbedding(tf.keras.layers.Layer):
         config = super().get_config()
         config.update({'dim': self.dim})
         return config
+
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
+class FeatExtract(tf.keras.layers.Layer):
+    def __init__(self, keep_dim=False, **kwargs):
+        super().__init__(**kwargs)
+        self.keep_dim = keep_dim
+
+    def build(self, input_shape):
+        dim = input_shape[-1]
+        self.pad = tf.keras.layers.ZeroPadding2D(1, name='pad')
+        self.conv = tf.keras.Sequential([
+            tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
+            tf.keras.layers.Activation('gelu', name='conv/1'),
+            SE(name='conv/2'),
+            tf.keras.layers.Conv2D(dim, kernel_size=1, strides=1, padding='valid', use_bias=False, name='conv/3')
+        ])
+        if not self.keep_dim:
+            self.pool = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding='valid', name='pool')
+        # else:
+        #     self.pool = tf.keras.layers.Activation('linear', name='identity')  # hack for PyTorch nn.Identity layer ;)
+        super().build(input_shape)
+
+    def call(self, inputs, **kwargs):
+        x = inputs + self.conv(self.pad(inputs))  # if pad had weights it would've thrown error with .save_weights()
+        if not self.keep_dim:
+            x = self.pool(self.pad(x))
+        return x
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "keep_dim":self.keep_dim,
+        })
+        return config
