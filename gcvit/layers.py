@@ -113,7 +113,7 @@ class ReduceSize(tf.keras.layers.Layer):
 
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
-class PatchEmbedding(tf.keras.layers.Layer):
+class PatchEmbed(tf.keras.layers.Layer):
     def __init__(self, dim, **kwargs):
         super().__init__(**kwargs)
         self.dim = dim
