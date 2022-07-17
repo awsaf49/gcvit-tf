@@ -4,13 +4,13 @@ from tensorflow.keras.utils import register_keras_serializable
 
 
 @register_keras_serializable(package="gcvit")
-class MLP(tf.keras.layers.Layer):
-    def __init__(self, hidden_features=None, out_features=None, act_layer='gelu', drop=0., **kwargs):
+class Mlp(tf.keras.layers.Layer):
+    def __init__(self, hidden_features=None, out_features=None, act_layer='gelu', dropout=0., **kwargs):
         super().__init__(**kwargs)
         self.hidden_features = hidden_features
         self.out_features = out_features
         self.act_layer = act_layer
-        self.drop_rate = drop
+        self.dropout = dropout
 
     def build(self, input_shape):
         self.in_features = input_shape[-1]
@@ -19,7 +19,7 @@ class MLP(tf.keras.layers.Layer):
         self.fc1 = tf.keras.layers.Dense(self.hidden_features, name="fc1")
         self.act = tf.keras.layers.Activation(self.act_layer, name="act")
         self.fc2 = tf.keras.layers.Dense(self.out_features, name="fc2")
-        self.drop = tf.keras.layers.Dropout(self.drop_rate, name="drop")  # won't show up in tf.keras.Model summary
+        self.drop = tf.keras.layers.Dropout(self.dropout, name="drop")  # won't show up in tf.keras.Model summary
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
@@ -36,7 +36,7 @@ class MLP(tf.keras.layers.Layer):
             "hidden_features":self.hidden_features, 
             "out_features":self.out_features, 
             "act_layer":self.act_layer,
-            "drop":self.drop_rate
+            "dropout":self.dropout
             })
         return config
 
