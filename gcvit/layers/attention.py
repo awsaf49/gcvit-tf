@@ -17,7 +17,7 @@ class WindowAttention(tf.keras.layers.Layer):
         self.proj_dropout = proj_dropout
 
     def build(self, input_shape):
-        dim = input_shape[-1]
+        dim = input_shape[0][-1]
         head_dim = dim // self.num_heads
         self.scale = self.qk_scale or head_dim ** -0.5
         self.qkv = tf.keras.layers.Dense(dim * 3, use_bias=self.qkv_bias, name='qkv')
@@ -47,6 +47,7 @@ class WindowAttention(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
+        inputs, q_global = inputs  # q_global unused but consistent with Block layer
         B_, N, C = tf.shape(inputs) # B*num_window, num_tokens, channels
         qkv = self.qkv(inputs)
         qkv = tf.reshape(qkv, [B_, N, 3, self.num_heads, C // self.num_heads])
