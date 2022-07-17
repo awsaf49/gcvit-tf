@@ -75,8 +75,8 @@ class WindowAttention(tf.keras.layers.Layer):
             'num_heads': self.num_heads,
             'qkv_bias': self.qkv_bias,
             'qk_scale': self.qk_scale,
-            'attn_dropout': self.attn_droput,
-            'proj_dropout': self.proj_droput
+            'attn_dropout': self.attn_dropout,
+            'proj_dropout': self.proj_dropout
         })
         return config
 
