@@ -3,7 +3,7 @@ import tensorflow_addons as tfa
 from tensorflow.keras.utils import register_keras_serializable
 
 
-@register_keras_serializable(package='TFGCVit')
+@register_keras_serializable(package="gcvit")
 class WindowAttention(tf.keras.layers.Layer):
     def __init__(self, window_size, num_heads, qkv_bias=True, qk_scale=None, attn_dropout=0., proj_dropout=0.,
                  **kwargs):
@@ -47,7 +47,7 @@ class WindowAttention(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
-        B_, N, C = tf.shape(inputs)
+        B_, N, C = tf.shape(inputs) # B*num_window, num_tokens, channels
         qkv = self.qkv(inputs)
         qkv = tf.reshape(qkv, [B_, N, 3, self.num_heads, C // self.num_heads])
         qkv = tf.transpose(qkv, [2, 0, 3, 1, 4])
@@ -62,7 +62,7 @@ class WindowAttention(tf.keras.layers.Layer):
         attn = self.softmax(attn)
         attn = self.attn_drop(attn)
 
-        x = tf.transpose((attn @ v), perm=[0, 2, 1, 3]) # B, num_token, num_head, channels_per_head
+        x = tf.transpose((attn @ v), perm=[0, 2, 1, 3]) # B_, num_tokens, num_heads, channels_per_head
         x = tf.reshape(x, shape=[B_, N, C])
         x = self.proj(x)
         x = self.proj_drop(x)
