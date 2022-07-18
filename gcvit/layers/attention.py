@@ -53,7 +53,7 @@ class WindowAttention(tf.keras.layers.Layer):
 
     def call(self, inputs, **kwargs):
         if self.global_query:
-            inputs, q_global = inputs  # q_global unused but consistent with Block layer
+            inputs, q_global = inputs
             B = tf.shape(q_global)[0] # B, N, C
         B_, N, C = tf.shape(inputs) # B*num_window, num_tokens, channels
         qkv = self.qkv(inputs)
