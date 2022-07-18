@@ -52,18 +52,20 @@ class SE(tf.keras.layers.Layer):
         inp = input_shape[-1]
         self.oup = self.oup or inp
         self.avg_pool = tfa.layers.AdaptiveAveragePooling2D(1, name="avg_pool")
-        self.fc = tf.keras.Sequential([
+        self.fc = [
             tf.keras.layers.Dense(int(inp * self.expansion), use_bias=False, name='fc/0'),
             tf.keras.layers.Activation('gelu', name='fc/1'),
             tf.keras.layers.Dense(self.oup, use_bias=False, name='fc/2'),
             tf.keras.layers.Activation('sigmoid', name='fc/3')
-        ])
+            ]
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
         b, _, _, c = tf.shape(inputs)
         x = tf.reshape(self.avg_pool(inputs), (b, c))
-        x = tf.reshape(self.fc(x), (b, 1, 1, c))
+        for layer in self.fc:
+            x = layer(x)
+        x = tf.reshape(x, (b, 1, 1, c))
         return x*inputs
 
     def get_config(self):
@@ -85,12 +87,12 @@ class ReduceSize(tf.keras.layers.Layer):
         dim = input_shape[-1]
         dim_out = dim if self.keep_dim else 2*dim
         self.pad = tf.keras.layers.ZeroPadding2D(1, name='pad')
-        self.conv = tf.keras.Sequential([
+        self.conv = [
             tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
             tf.keras.layers.Activation('gelu', name='conv/1'),
             SE(name='conv/2'),
             tf.keras.layers.Conv2D(dim, kernel_size=1, strides=1, padding='valid', use_bias=False, name='conv/3')
-        ])
+        ]
         self.reduction = tf.keras.layers.Conv2D(dim_out, kernel_size=3, strides=2, padding='valid', use_bias=False,
                                                 name='reduction')
         self.norm1 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm1')  # eps like PyTorch
@@ -99,8 +101,12 @@ class ReduceSize(tf.keras.layers.Layer):
 
     def call(self, inputs, **kwargs):
         x = self.norm1(inputs)
-        x = x + self.conv(self.pad(x))  # if pad had weights it would've thrown error with .save_weights()
-        x = self.reduction(self.pad(x))
+        xr = self.pad(x)  # if pad had weights it would've thrown error with .save_weights()
+        for layer in self.conv:
+            xr = layer(xr)
+        x = x + xr
+        x = self.pad(x)
+        x = self.reduction(x)
         x = self.norm2(x)
         return x
 
@@ -120,12 +126,12 @@ class FeatExtract(tf.keras.layers.Layer):
     def build(self, input_shape):
         dim = input_shape[-1]
         self.pad = tf.keras.layers.ZeroPadding2D(1, name='pad')
-        self.conv = tf.keras.Sequential([
+        self.conv = [
             tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
             tf.keras.layers.Activation('gelu', name='conv/1'),
             SE(name='conv/2'),
             tf.keras.layers.Conv2D(dim, kernel_size=1, strides=1, padding='valid', use_bias=False, name='conv/3')
-        ])
+        ]
         if not self.keep_dim:
             self.pool = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding='valid', name='pool')
         # else:
@@ -133,9 +139,14 @@ class FeatExtract(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
-        x = inputs + self.conv(self.pad(inputs))  # if pad had weights it would've thrown error with .save_weights()
+        x = inputs
+        xr = self.pad(x)
+        for layer in self.conv:
+            xr = layer(xr)
+        x = x + xr # if pad had weights it would've thrown error with .save_weights()
         if not self.keep_dim:
-            x = self.pool(self.pad(x))
+            x = self.pad(x)
+            x = self.pool(x)
         return x
 
     def get_config(self):
