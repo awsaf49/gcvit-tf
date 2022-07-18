@@ -5,7 +5,7 @@ from .block import GCViTBlock
 
 @register_keras_serializable(package="gcvit")
 class GCViTLayer(tf.keras.layers.Layer):
-    def __init__(self, depth, num_heads, window_size, keep_dims, downsample=Truue, mlp_ratio=4., qkv_bias=True, 
+    def __init__(self, depth, num_heads, window_size, keep_dims, downsample=True, mlp_ratio=4., qkv_bias=True, 
                 qk_scale=None, drop=0., attn_drop=0., path_drop=0., layer_scale=None, **kwargs):
         super().__init__(**kwargs)
         self.depth = depth
