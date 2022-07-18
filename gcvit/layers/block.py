@@ -1,9 +1,9 @@
 import tensorflow as tf
 from tensorflow.keras.utils import register_keras_serializable
-from .attention import WindowAttentionGlobal, WindowAttention
-from .drop import DropPath, Identity
+from .attention import WindowAttention
+from .drop import DropPath
 from .window import window_partition, window_reverse
-from .feature import Mlp
+from .feature import Mlp, FeatExtract
 
 
 @register_keras_serializable(package="gcvit")
@@ -24,10 +24,7 @@ class GCViTBlock(tf.keras.layers.Layer):
         self.layer_scale = layer_scale
 
     def build(self, input_shape):
-        if self.global_query:
-            B, H, W, C = input_shape[0]
-        else:
-            B, H, W, C = input_shape
+        B, H, W, C = input_shape[0]
         self.norm1 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm1')
         self.attn = WindowAttention(window_size=self.window_size, 
                                    num_heads=self.num_heads,
@@ -62,6 +59,8 @@ class GCViTBlock(tf.keras.layers.Layer):
     def call(self, inputs, **kwargs):
         if self.global_query:
             inputs, q_global = inputs
+        else:
+            inputs = inputs[0]
         B, H, W, C = tf.shape(inputs)
         x = self.norm1(inputs)
         # create windows and concat them in batch axis
@@ -72,7 +71,7 @@ class GCViTBlock(tf.keras.layers.Layer):
         if self.global_query:
             x = self.attn([x, q_global])
         else:
-            x = self.attn(x)
+            x = self.attn([x])
         # reverse window partition
         x = window_reverse(x, self.window_size, H, W, C)
         # FFN
