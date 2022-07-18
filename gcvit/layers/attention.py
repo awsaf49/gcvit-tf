@@ -18,10 +18,7 @@ class WindowAttention(tf.keras.layers.Layer):
         self.proj_dropout = proj_dropout
 
     def build(self, input_shape):
-        if self.global_query:
-            dim = input_shape[0][-1]
-        else:
-            dim = input_shape[-1]
+        dim = input_shape[0][-1]
         head_dim = dim // self.num_heads
         self.scale = self.qk_scale or head_dim ** -0.5
         self.qkv_size = 3 - int(self.global_query)
@@ -55,6 +52,8 @@ class WindowAttention(tf.keras.layers.Layer):
         if self.global_query:
             inputs, q_global = inputs
             B = tf.shape(q_global)[0] # B, N, C
+        else:
+            inputs = inputs[0]
         B_, N, C = tf.shape(inputs) # B*num_window, num_tokens, channels
         qkv = self.qkv(inputs)
         qkv = tf.reshape(qkv, [B_, N, self.qkv_size, self.num_heads, C // self.num_heads])
