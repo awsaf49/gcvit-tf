@@ -1,17 +1,18 @@
 import tensorflow as tf
 from tensorflow.keras.utils import register_keras_serializable
-from .feature import FeatExtract
+from .feature import FeatExtract, ReduceSize
 from .block import GCViTBlock
 
 @register_keras_serializable(package="gcvit")
 class GCViTLayer(tf.keras.layers.Layer):
-    def __init__(self, depth, num_heads, window_size, keep_dims, mlp_ratio=4., qkv_bias=True, qk_scale=None, drop=0.,
-                 attn_drop=0., path_drop=0., layer_scale=None, **kwargs):
+    def __init__(self, depth, num_heads, window_size, keep_dims, downsample=Truue, mlp_ratio=4., qkv_bias=True, 
+                qk_scale=None, drop=0., attn_drop=0., path_drop=0., layer_scale=None, **kwargs):
         super().__init__(**kwargs)
         self.depth = depth
         self.num_heads = num_heads
         self.window_size = window_size
         self.keep_dims = keep_dims
+        self.downsample = downsample
         self.mlp_ratio = mlp_ratio
         self.qkv_bias = qkv_bias
         self.qk_scale = qk_scale
@@ -35,6 +36,7 @@ class GCViTLayer(tf.keras.layers.Layer):
                       layer_scale=self.layer_scale, 
                       name=f'blocks/{i}')
             for i in range(self.depth)]
+        self.down = ReduceSize(keep_dim=False, name='downsample')
         self.to_q_global = [
             FeatExtract(keep_dim, name=f'to_q_global/{i}')
             for i, keep_dim in enumerate(self.keep_dims)]
@@ -62,7 +64,10 @@ class GCViTLayer(tf.keras.layers.Layer):
             else:
                 x = blk([x])
         x = x[:, :height, :width, :]  # https://github.com/NVlabs/GCVit/issues/9
+        # set shape for [B, ?, ?, C]
         x.set_shape(inputs.shape)  # `tf.reshape` creates new tensor with new_shape
+        # downsample
+        x = self.down(x)
         return x
 
     def get_config(self):
@@ -72,6 +77,7 @@ class GCViTLayer(tf.keras.layers.Layer):
             'num_heads': self.num_heads,
             'window_size': self.window_size,
             'keep_dims': self.keep_dims,
+            'downsample': self.downsample,
             'mlp_ratio': self.mlp_ratio,
             'qkv_bias': self.qkv_bias,
             'qk_scale': self.qk_scale,
