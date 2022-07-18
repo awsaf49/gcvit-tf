@@ -38,7 +38,7 @@ class GCViTLayer(tf.keras.layers.Layer):
         self.to_q_global = [
             FeatExtract(keep_dim, name=f'to_q_global/{i}')
             for i, keep_dim in enumerate(self.keep_dims)]
-        self.resize = tf.keras.layers.Resizing(self.window_size, self.window_size, interpolation='bilinear')
+        self.resize = tf.keras.layers.Resizing(self.window_size, self.window_size, interpolation='bicubic')
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
@@ -61,8 +61,8 @@ class GCViTLayer(tf.keras.layers.Layer):
                 x = blk([x, q_global])
             else:
                 x = blk([x])
-        x = x[:, :height, :width, ...]  # https://github.com/NVlabs/GCVit/issues/9
-        x.set_shape(inputs.shape)
+        x = x[:, :height, :width, :]  # https://github.com/NVlabs/GCVit/issues/9
+        x.set_shape(inputs.shape)  # `tf.reshape` creates new tensor with new_shape
         return x
 
     def get_config(self):
