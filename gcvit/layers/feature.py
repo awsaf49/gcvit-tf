@@ -19,15 +19,16 @@ class Mlp(tf.keras.layers.Layer):
         self.fc1 = tf.keras.layers.Dense(self.hidden_features, name="fc1")
         self.act = tf.keras.layers.Activation(self.act_layer, name="act")
         self.fc2 = tf.keras.layers.Dense(self.out_features, name="fc2")
-        self.drop = tf.keras.layers.Dropout(self.dropout, name="drop")  # won't show up in tf.keras.Model summary
+        self.drop1 = tf.keras.layers.Dropout(self.dropout, name="drop1")
+        self.drop2 = tf.keras.layers.Dropout(self.dropout, name="drop2")
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
         x = self.fc1(inputs)
         x = self.act(x)
-        x = self.drop(x)
+        x = self.drop1(x)
         x = self.fc2(x)
-        x = self.drop(x)
+        x = self.drop2(x)
         return x
 
     def get_config(self):
@@ -86,7 +87,8 @@ class ReduceSize(tf.keras.layers.Layer):
     def build(self, input_shape):
         dim = input_shape[-1]
         dim_out = dim if self.keep_dim else 2*dim
-        self.pad = tf.keras.layers.ZeroPadding2D(1, name='pad')
+        self.pad1 = tf.keras.layers.ZeroPadding2D(1, name='pad1')
+        self.pad2 = tf.keras.layers.ZeroPadding2D(1, name='pad2')
         self.conv = [
             tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
             tf.keras.layers.Activation('gelu', name='conv/1'),
@@ -101,11 +103,11 @@ class ReduceSize(tf.keras.layers.Layer):
 
     def call(self, inputs, **kwargs):
         x = self.norm1(inputs)
-        xr = self.pad(x)  # if pad had weights it would've thrown error with .save_weights()
+        xr = self.pad1(x)  # if pad had weights it would've thrown error with .save_weights()
         for layer in self.conv:
             xr = layer(xr)
         x = x + xr
-        x = self.pad(x)
+        x = self.pad2(x)
         x = self.reduction(x)
         x = self.norm2(x)
         return x
@@ -125,7 +127,8 @@ class FeatExtract(tf.keras.layers.Layer):
 
     def build(self, input_shape):
         dim = input_shape[-1]
-        self.pad = tf.keras.layers.ZeroPadding2D(1, name='pad')
+        self.pad1 = tf.keras.layers.ZeroPadding2D(1, name='pad1')
+        self.pad2 = tf.keras.layers.ZeroPadding2D(1, name='pad2')
         self.conv = [
             tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
             tf.keras.layers.Activation('gelu', name='conv/1'),
@@ -140,12 +143,12 @@ class FeatExtract(tf.keras.layers.Layer):
 
     def call(self, inputs, **kwargs):
         x = inputs
-        xr = self.pad(x)
+        xr = self.pad1(x)
         for layer in self.conv:
             xr = layer(xr)
         x = x + xr # if pad had weights it would've thrown error with .save_weights()
         if not self.keep_dim:
-            x = self.pad(x)
+            x = self.pad2(x)
             x = self.pool(x)
         return x
 

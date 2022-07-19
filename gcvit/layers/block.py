@@ -34,7 +34,8 @@ class GCViTBlock(tf.keras.layers.Layer):
                                    attn_dropout=self.attn_drop, 
                                    proj_dropout=self.drop,
                                    name='attn')
-        self.drop_path = DropPath(self.path_drop)
+        self.drop_path1 = DropPath(self.path_drop)
+        self.drop_path2 = DropPath(self.path_drop)
         self.norm2 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm2')
         self.mlp = Mlp(hidden_features=int(C * self.mlp_ratio), dropout=self.drop, act_layer=self.act_layer, name='mlp')
         if self.layer_scale is not None:
@@ -75,8 +76,8 @@ class GCViTBlock(tf.keras.layers.Layer):
         # reverse window partition
         x = window_reverse(x, self.window_size, H, W, C)
         # FFN
-        x = inputs + self.drop_path(x * self.gamma1)
-        x = x + self.drop_path(self.gamma2 * self.mlp(self.norm2(x)))
+        x = inputs + self.drop_path1(x * self.gamma1)
+        x = x + self.drop_path2(self.gamma2 * self.mlp(self.norm2(x)))
         return x
 
     def get_config(self):
