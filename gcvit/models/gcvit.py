@@ -5,7 +5,7 @@ from ..layers import PatchEmbed, GCViTLayer, Identity
 
 
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/release/download'
-TAG = 'v0.0.1'
+TAG = 'v1.0.0'
 NAME2CONFIG = {
     'gcvit_tiny': {'window_size': (7, 7, 14, 7),
                     'dim': 64,
@@ -96,32 +96,32 @@ class GCViT(tf.keras.Model):
 def GCViTTiny(pretrain=False, **kwargs):
     name = 'gcvit_tiny'
     config = NAME2CONFIG[name]
-    ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
+    ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, **config, **kwargs)
     model(tf.random.uniform(shape=(1, 224, 224, 3)))
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
+        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
 def GCViTSmall(pretrain=False, **kwargs):
     name = 'gcvit_small'
     config = NAME2CONFIG[name]
-    ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
+    ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, **config, **kwargs)
     model(tf.random.uniform(shape=(1, 224, 224, 3)))
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
+        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
 def GCViTBase(pretrain=False, **kwargs):
     name = 'gcvit_base'
     config = NAME2CONFIG[name]
-    ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
+    ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, **config, **kwargs)
     model(tf.random.uniform(shape=(1, 224, 224, 3)))
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
+        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
