@@ -63,6 +63,11 @@ class GCViT(tf.keras.Model):
         x = self.head(x)
         x = self.head_act(x)
         return x
+
+    def build_graph(self, input_shape=(224, 224, 3)):
+        """https://www.kaggle.com/code/ipythonx/tf-hybrid-efficientnet-swin-transformer-gradcam"""
+        x = tf.keras.Input(shape=input_shape)
+        return tf.keras.Model(inputs=[x], outputs=self.call(x))
     
     def get_config(self):
         config = {
