@@ -32,7 +32,7 @@ NAME2CONFIG = {
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
         drop_rate=0., mlp_ratio=3., qkv_bias=True, qk_scale=None, attn_drop=0., path_drop=0.1, layer_scale=None,
-        pooling=None, classes=1000, classifier_activation='softmax', **kwargs):
+        pooling='avg', classes=1000, classifier_activation='softmax', **kwargs):
         super().__init__(**kwargs)
         self.window_size = window_size
         self.dim = dim
