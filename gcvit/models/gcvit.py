@@ -10,9 +10,8 @@ from ..layers.drop import Identity
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
         drop_rate=0., mlp_ratio=3., qkv_bias=True, qk_scale=None, attn_drop=0., path_drop=0.1, layer_scale=None,
-        model_name='gcvit', include_top=True, weights=None, input_tensor=None, input_shape=None, pooling=None,
-        classes=1000, classifier_activation='softmax'):
-        super().__init__()
+        pooling=None, classes=1000, classifier_activation='softmax', **kwargs):
+        super().__init__(**kwargs)
         self.window_size = window_size
         self.dim = dim
         self.depths = depths
@@ -24,11 +23,6 @@ class GCViT(tf.keras.Model):
         self.attn_drop = attn_drop
         self.path_drop = path_drop
         self.layer_scale = layer_scale
-        self.model_name = model_name
-        self.include_top = include_top
-        self.weights = weights
-        self.input_tensor = input_tensor
-        self.input_shape = input_shape
         self.pooling = pooling
         self.classes = classes
         self.classifier_activation = classifier_activation
@@ -71,3 +65,23 @@ class GCViT(tf.keras.Model):
         x = self.head(x)
         x = self.head_act(x)
         return x
+    
+    def get_config(self):
+        config = {
+            'window_size': self.window_size,
+            'dim': self.dim,
+            'depths': self.depths,
+            'num_heads': self.num_heads,
+            'drop_rate': self.drop_rate,
+            'mlp_ratio': self.mlp_ratio,
+            'qkv_bias': self.qkv_bias,
+            'qk_scale': self.qk_scale,
+            'attn_drop': self.attn_drop,
+            'path_drop': self.path_drop,
+            'layer_scale': self.layer_scale,
+            'pooling': self.pooling,
+            'classes': self.classes,
+            'classifier_activation': self.classifier_activation
+        }
+        return config
+            
