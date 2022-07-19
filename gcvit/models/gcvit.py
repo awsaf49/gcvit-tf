@@ -45,8 +45,7 @@ class GCViT(tf.keras.Model):
             self.pool = Identity(name='pool')
         else:
             raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {pooling}')
-        self.head = tf.keras.layers.Dense(classes, name='head')
-        self.head_act = tf.keras.layers.Activation(classifier_activation, name='head_act')
+        self.head = tf.keras.layers.Dense(classes, activation=classifier_activation, name='head')
 
     def feature(self, inputs, **kwargs):
         # Define model pipeline
