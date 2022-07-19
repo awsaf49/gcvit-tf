@@ -1,7 +1,7 @@
 <h1 align="center">
 <p><a href='https://arxiv.org/pdf/2206.09959v1.pdf'>GCViT: Global Context Vision Transformer</a></p>
 </h1>
-<div align=center><img src="https://i.ibb.co/1GpJTNS/lvg-arch.png" width=800></div>
+<div align=center><img src="https://github.com/awsaf49/gcvit-tf/blob/main/image/lvg-arch.png" width=800></div>
 <p align="center">
 <a href="https://github.com/TensorSpeech/TensorFlowASR/blob/main/LICENSE">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
@@ -20,16 +20,16 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 ## Model
 * Architecture:
 
-<img src="https://i.ibb.co/PmQDjDF/arch.png">
+<img src="https://github.com/awsaf49/gcvit-tf/blob/main/image/arch.png">
 
 * Local Vs Global Attention:
 
-<img src="https://i.ibb.co/7Xg6QQt/lvg-msa.png">
+<img src="https://github.com/awsaf49/gcvit-tf/blob/main/image/lvg-msa.png">
 
 ## Result
 > The reported result in the paper is shown in the figure. But due to issues in the **codebase** actual result differs from the reported result.
 
-<img src="https://i.ibb.co/YQ4CHQF/result.png" width=900>
+<img src="https://github.com/awsaf49/gcvit-tf/blob/main/image/result.png" width=900>
 
 ## Installation
 ```bash
@@ -62,8 +62,10 @@ Prediction:
 ```
 
 ## To Do
-- [x] Build model with `tf.keras.Model`
-- [x] Port weights from official repo
+- [ ] Working training example.
+- [ ] Gradio Demo.
+- [x] Build model with `tf.keras.Model`.
+- [x] Port weights from official repo.
 
 ## Acknowledgement
 * [GCVit](https://github.com/NVlabs/GCVit) (Official)
