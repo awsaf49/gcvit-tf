@@ -29,7 +29,7 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 <img src="./image/result.PNG" width=900>
 
 ## Installation
-```shell
+```bash
 pip install gcvit_tf
 ```
 
@@ -46,3 +46,14 @@ from gcvit import GCVitTiny
 * [Swin-Transformer-TF](https://github.com/rishigami/Swin-Transformer-TF)
 * [tfgcvit](https://github.com/shkarupa-alex/tfgcvit/tree/develop/tfgcvit)
 * [keras_cv_attention_models](https://github.com/leondgarse/keras_cv_attention_model)
+
+
+## Citation
+```bibtex
+@article{hatamizadeh2022global,
+  title={Global Context Vision Transformers},
+  author={Hatamizadeh, Ali and Yin, Hongxu and Kautz, Jan and Molchanov, Pavlo},
+  journal={arXiv preprint arXiv:2206.09959},
+  year={2022}
+}
+```
