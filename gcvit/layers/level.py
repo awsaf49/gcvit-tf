@@ -67,7 +67,8 @@ class GCViTLayer(tf.keras.layers.Layer):
         # set shape for [B, ?, ?, C]
         x.set_shape(inputs.shape)  # `tf.reshape` creates new tensor with new_shape
         # downsample
-        x = self.down(x)
+        if self.downsample:
+          x = self.down(x)
         return x
 
     def get_config(self):
