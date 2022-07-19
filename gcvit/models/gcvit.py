@@ -61,30 +61,9 @@ class GCViT(tf.keras.Model):
     def call(self, inputs, **kwargs):
         x = self.feature(inputs)
         x = self.head(x)
-        x = self.head_act(x)
         return x
 
     def build_graph(self, input_shape=(224, 224, 3)):
         """https://www.kaggle.com/code/ipythonx/tf-hybrid-efficientnet-swin-transformer-gradcam"""
         x = tf.keras.Input(shape=input_shape)
         return tf.keras.Model(inputs=[x], outputs=self.call(x))
-    
-    def get_config(self):
-        config = {
-            'window_size': self.window_size,
-            'dim': self.dim,
-            'depths': self.depths,
-            'num_heads': self.num_heads,
-            'drop_rate': self.drop_rate,
-            'mlp_ratio': self.mlp_ratio,
-            'qkv_bias': self.qkv_bias,
-            'qk_scale': self.qk_scale,
-            'attn_drop': self.attn_drop,
-            'path_drop': self.path_drop,
-            'layer_scale': self.layer_scale,
-            'pooling': self.pooling,
-            'classes': self.classes,
-            'classifier_activation': self.classifier_activation
-        }
-        return config
-            
