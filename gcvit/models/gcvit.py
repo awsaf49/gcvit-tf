@@ -47,8 +47,8 @@ class GCViT(tf.keras.Model):
             self.pool = Identity(name='pool')
         else:
             raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {pooling}')
-        self.head = tf.keras.layers.Dense(classes, name='head')
-        self.head_act = tf.keras.layers.Activation(classifier_activation, name='head_act')
+        self.head_cls = tf.keras.layers.Dense(classes, name='head/cls')
+        self.head_act = tf.keras.layers.Activation(classifier_activation, name='head/act')
 
     def feature(self, inputs, **kwargs):
         # Define model pipeline
@@ -62,26 +62,6 @@ class GCViT(tf.keras.Model):
 
     def call(self, inputs, **kwargs):
         x = self.feature(inputs)
-        x = self.head(x)
+        x = self.head_cls(x)
         x = self.head_act(x)
-        return x
-    
-    def get_config(self):
-        config = {
-            'window_size': self.window_size,
-            'dim': self.dim,
-            'depths': self.depths,
-            'num_heads': self.num_heads,
-            'drop_rate': self.drop_rate,
-            'mlp_ratio': self.mlp_ratio,
-            'qkv_bias': self.qkv_bias,
-            'qk_scale': self.qk_scale,
-            'attn_drop': self.attn_drop,
-            'path_drop': self.path_drop,
-            'layer_scale': self.layer_scale,
-            'pooling': self.pooling,
-            'classes': self.classes,
-            'classifier_activation': self.classifier_activation
-        }
-        return config
-            
+        return x      
