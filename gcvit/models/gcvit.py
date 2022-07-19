@@ -1,9 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.utils import register_keras_serializable
-from ..layers.embedding import PatchEmbed
-from ..layers.level import GCViTLayer
-from ..layers.drop import Identity
+from ..layers import PatchEmbed, GCViTLayer, Identity
 
 
 @register_keras_serializable(package='gcvit')
