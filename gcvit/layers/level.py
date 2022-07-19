@@ -6,7 +6,7 @@ from .block import GCViTBlock
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class GCViTLayer(tf.keras.layers.Layer):
     def __init__(self, depth, num_heads, window_size, keep_dims, downsample=True, mlp_ratio=4., qkv_bias=True, 
-                qk_scale=None, drop=0., attn_drop=0., path_drop=0., layer_scale=None, **kwargs):
+                qk_scale=None, drop=0., attn_drop=0., path_drop=0., layer_scale=None, resize_query=False, **kwargs):
         super().__init__(**kwargs)
         self.depth = depth
         self.num_heads = num_heads
@@ -20,6 +20,7 @@ class GCViTLayer(tf.keras.layers.Layer):
         self.attn_drop = attn_drop
         self.path_drop = path_drop
         self.layer_scale = layer_scale
+        self.resize_query = resize_query
 
     def build(self, input_shape):
         path_drop = [self.path_drop] * self.depth if not isinstance(self.path_drop, list) else self.path_drop
@@ -56,7 +57,9 @@ class GCViTLayer(tf.keras.layers.Layer):
         q_global = x  # (B, H, W, C)
         for layer in self.to_q_global:
             q_global = layer(q_global)  #  official impl issue: https://github.com/NVlabs/GCVit/issues/13
-        q_global = self.resize(q_global)  # to avoid mismatch between feat_map and q_global: https://github.com/NVlabs/GCVit/issues/9
+        # resize query to fit key-value, but result in poor score with official weights?
+        if self.resize_query:
+            q_global = self.resize(q_global)  # to avoid mismatch between feat_map and q_global: https://github.com/NVlabs/GCVit/issues/9
         # feature_map -> windows -> window_attention -> feature_map
         for i, blk in enumerate(self.blocks):
             if i % 2:

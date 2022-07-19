@@ -31,7 +31,7 @@ NAME2CONFIG = {
 @tf.keras.utils.register_keras_serializable(package='gcvit')
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
-        drop_rate=0., mlp_ratio=3., qkv_bias=True, qk_scale=None, attn_drop=0., path_drop=0.1, layer_scale=None,
+        drop_rate=0., mlp_ratio=3., qkv_bias=True, qk_scale=None, attn_drop=0., path_drop=0.1, layer_scale=None, resize_query=False,
         pooling='avg', classes=1000, classifier_activation='softmax', **kwargs):
         super().__init__(**kwargs)
         self.window_size = window_size
@@ -45,6 +45,7 @@ class GCViT(tf.keras.Model):
         self.attn_drop = attn_drop
         self.path_drop = path_drop
         self.layer_scale = layer_scale
+        self.resize_query = resize_query
         self.pooling = pooling
         self.classes = classes
         self.classifier_activation = classifier_activation
@@ -58,7 +59,8 @@ class GCViT(tf.keras.Model):
             path_drop = path_drops[sum(depths[:i]):sum(depths[:i + 1])].tolist()
             level = GCViTLayer(depth=depths[i], num_heads=num_heads[i], window_size=window_size[i], keep_dims=keep_dims[i],
                     downsample=(i < len(depths) - 1), mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale, 
-                    drop=drop_rate, attn_drop=attn_drop, path_drop=path_drop, layer_scale=layer_scale, name=f'levels/{i}')
+                    drop=drop_rate, attn_drop=attn_drop, path_drop=path_drop, layer_scale=layer_scale, resize_query=resize_query,
+                    name=f'levels/{i}')
             self.levels.append(level)
         self.norm = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm')
         if pooling == 'avg':
