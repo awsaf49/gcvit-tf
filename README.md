@@ -63,6 +63,7 @@ Prediction:
 
 ## To Do
 - [ ] Working training example.
+- [ ] GradCAM showcase.
 - [ ] Gradio Demo.
 - [x] Build model with `tf.keras.Model`.
 - [x] Port weights from official repo.
