@@ -16,7 +16,7 @@ class WindowAttention(tf.keras.layers.Layer):
         self.qk_scale = qk_scale
         self.attn_dropout = attn_dropout
         self.proj_dropout = proj_dropout
-
+    
     def build(self, input_shape):
         dim = input_shape[0][-1]
         head_dim = dim // self.num_heads
@@ -29,6 +29,14 @@ class WindowAttention(tf.keras.layers.Layer):
             initializer=tf.keras.initializers.TruncatedNormal(stddev=0.02),
             trainable=True,
             dtype=self.dtype)
+        self.attn_drop = tf.keras.layers.Dropout(self.attn_dropout, name='attn_drop')
+        self.proj = tf.keras.layers.Dense(dim, name='proj')
+        self.proj_drop = tf.keras.layers.Dropout(self.proj_dropout, name='proj_drop')
+        self.softmax = tf.keras.layers.Activation('softmax', name='softmax')
+        self.relative_position_index = self.get_relative_position_index()
+        super().build(input_shape)
+        
+    def get_relative_position_index(self):
         coords_h = tf.range(self.window_size[0])
         coords_w = tf.range(self.window_size[1])
         coords = tf.stack(tf.meshgrid(coords_h, coords_w, indexing='ij'), axis=0)
@@ -39,14 +47,7 @@ class WindowAttention(tf.keras.layers.Layer):
         relative_coords_yy = (relative_coords[:, :, 1] + self.window_size[1] - 1) 
         relative_coords_xx = relative_coords_xx * (2 * self.window_size[1] - 1)
         relative_position_index = (relative_coords_xx + relative_coords_yy)
-        self.relative_position_index = tf.Variable(relative_position_index, 
-                                                  trainable=False,
-                                                  name=f'relative_position_index')
-        self.attn_drop = tf.keras.layers.Dropout(self.attn_dropout, name='attn_drop')
-        self.proj = tf.keras.layers.Dense(dim, name='proj')
-        self.proj_drop = tf.keras.layers.Dropout(self.proj_dropout, name='proj_drop')
-        self.softmax = tf.keras.layers.Activation('softmax', name='softmax')
-        super().build(input_shape)
+        return relative_position_index
 
     def call(self, inputs, **kwargs):
         if self.global_query:
