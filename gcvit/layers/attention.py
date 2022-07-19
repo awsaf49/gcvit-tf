@@ -54,7 +54,7 @@ class WindowAttention(tf.keras.layers.Layer):
             B = tf.shape(q_global)[0] # B, N, C
         else:
             inputs = inputs[0]
-        B_, N, C = tf.shape(inputs) # B*num_window, num_tokens, channels
+        B_, N, C = tf.unstack(tf.shape(inputs), num=3) # B*num_window, num_tokens, channels
         qkv = self.qkv(inputs)
         qkv = tf.reshape(qkv, [B_, N, self.qkv_size, self.num_heads, C // self.num_heads])
         qkv = tf.transpose(qkv, [2, 0, 3, 1, 4])

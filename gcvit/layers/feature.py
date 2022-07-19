@@ -62,7 +62,7 @@ class SE(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
-        b, _, _, c = tf.shape(inputs)
+        b, _, _, c = tf.unstack(tf.shape(inputs), num=4)
         x = tf.reshape(self.avg_pool(inputs), (b, c))
         for layer in self.fc:
             x = layer(x)

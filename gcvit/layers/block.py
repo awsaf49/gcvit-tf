@@ -62,7 +62,7 @@ class GCViTBlock(tf.keras.layers.Layer):
             inputs, q_global = inputs
         else:
             inputs = inputs[0]
-        B, H, W, C = tf.shape(inputs)
+        B, H, W, C = tf.unstack(tf.shape(inputs), num=4)
         x = self.norm1(inputs)
         # create windows and concat them in batch axis
         x = window_partition(x, self.window_size)  # (B_, win_h, win_w, C)

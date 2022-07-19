@@ -44,7 +44,7 @@ class GCViTLayer(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
-        height, width = tf.shape(inputs)[1:3]
+        height, width = tf.unstack(tf.shape(inputs)[1:3], num=2)
         # pad to multiple of window_size
         h_pad = (self.window_size - height % self.window_size) % self.window_size
         w_pad = (self.window_size - width % self.window_size) % self.window_size
