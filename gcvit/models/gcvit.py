@@ -4,6 +4,30 @@ import tensorflow as tf
 from ..layers import PatchEmbed, GCViTLayer, Identity
 
 
+BASE_URL = 'https://github.com/awsaf49/gcvit-tf/release/download'
+TAG = 'v0.0.1'
+NAME2CONFIG = {
+    'gcvit_tiny': {'window_size': (7, 7, 14, 7),
+                    'dim': 64,
+                    'depths': (3, 4, 19, 5),
+                    'num_heads': (2, 4, 8, 16), 
+                    'path_drop': 0.2,},
+    'gcvit_small': {'window_size': (7, 7, 14, 7), 
+                     'dim': 96, 
+                     'depths': (3, 4, 19, 5),
+                     'num_heads': (3, 6, 12, 24),
+                     'mlp_ratio': 2.,
+                     'path_drop': 0.3,
+                     'layer_scale': 1e-5,},
+    'gcvit_base': {'window_size': (7, 7, 14, 7),
+                    'dim':128, 
+                    'depths': (3, 4, 19, 5),
+                    'num_heads': (4, 8, 16, 32),
+                    'mlp_ratio': 2.,
+                    'path_drop': 0.5,
+                    'layer_scale': 1e-5,},
+    }
+
 @tf.keras.utils.register_keras_serializable(package='gcvit')
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
