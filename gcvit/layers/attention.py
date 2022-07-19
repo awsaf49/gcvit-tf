@@ -1,9 +1,9 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
-from tensorflow.keras.utils import register_keras_serializable
 
 
-@register_keras_serializable(package="gcvit")
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class WindowAttention(tf.keras.layers.Layer):
     def __init__(self, window_size, num_heads, global_query, qkv_bias=True, qk_scale=None, attn_dropout=0., proj_dropout=0.,
                  **kwargs):
@@ -96,7 +96,7 @@ class WindowAttention(tf.keras.layers.Layer):
         return config
 
 
-# @register_keras_serializable(package="gcvit")
+# @tf.keras.utils.register_keras_serializable(package="gcvit")
 # class WindowAttentionGlobal(tf.keras.layers.Layer):
 #     def __init__(self, window_size, num_heads, qkv_bias=True, qk_scale=None, attn_dropout=0., proj_dropout=0.,
 #                  **kwargs):

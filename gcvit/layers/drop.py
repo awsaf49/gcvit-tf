@@ -1,7 +1,7 @@
 import tensorflow as tf
-from tensorflow.keras.utils import register_keras_serializable
 
-@register_keras_serializable(package="gcvit")
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class Identity(tf.keras.layers.Layer):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -13,7 +13,7 @@ class Identity(tf.keras.layers.Layer):
         config = super().get_config()
         return config
 
-@register_keras_serializable(package="gcvit")
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class DropPath(tf.keras.layers.Layer):
     def __init__(self, drop_prob=0., scale_by_keep=True, **kwargs):
         super().__init__(**kwargs)

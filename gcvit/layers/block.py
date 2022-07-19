@@ -1,12 +1,12 @@
 import tensorflow as tf
-from tensorflow.keras.utils import register_keras_serializable
+
 from .attention import WindowAttention
 from .drop import DropPath
 from .window import window_partition, window_reverse
 from .feature import Mlp, FeatExtract
 
 
-@register_keras_serializable(package="gcvit")
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class GCViTBlock(tf.keras.layers.Layer):
     def __init__(self, window_size, num_heads, global_query, mlp_ratio=4., qkv_bias=True, qk_scale=None, drop=0.,
                  attn_drop=0., path_drop=0., act_layer='gelu', layer_scale=None, **kwargs):

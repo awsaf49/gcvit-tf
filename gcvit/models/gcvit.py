@@ -1,10 +1,10 @@
 import numpy as np
 import tensorflow as tf
-from tensorflow.keras.utils import register_keras_serializable
+
 from ..layers import PatchEmbed, GCViTLayer, Identity
 
 
-@register_keras_serializable(package='gcvit')
+@tf.keras.utils.register_keras_serializable(package='gcvit')
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
         drop_rate=0., mlp_ratio=3., qkv_bias=True, qk_scale=None, attn_drop=0., path_drop=0.1, layer_scale=None,

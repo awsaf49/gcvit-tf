@@ -1,9 +1,9 @@
 import tensorflow as tf
-from tensorflow.keras.utils import register_keras_serializable
+
 from .feature import ReduceSize
 
 
-@register_keras_serializable(package="gcvit")
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class PatchEmbed(tf.keras.layers.Layer):
     def __init__(self, dim, **kwargs):
         super().__init__(**kwargs)

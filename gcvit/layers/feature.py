@@ -1,9 +1,9 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
-from tensorflow.keras.utils import register_keras_serializable
 
 
-@register_keras_serializable(package="gcvit")
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class Mlp(tf.keras.layers.Layer):
     def __init__(self, hidden_features=None, out_features=None, act_layer='gelu', dropout=0., **kwargs):
         super().__init__(**kwargs)
@@ -42,7 +42,7 @@ class Mlp(tf.keras.layers.Layer):
         return config
 
 
-@register_keras_serializable(package="gcvit")
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class SE(tf.keras.layers.Layer):
     def __init__(self, oup=None, expansion=0.25, **kwargs):
         super().__init__(**kwargs)
@@ -78,7 +78,7 @@ class SE(tf.keras.layers.Layer):
         return config
 
 
-@register_keras_serializable(package="gcvit")
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class ReduceSize(tf.keras.layers.Layer):
     def __init__(self, keep_dim=False, **kwargs):
         super().__init__(**kwargs)
@@ -119,7 +119,7 @@ class ReduceSize(tf.keras.layers.Layer):
         })
         return config
 
-@register_keras_serializable(package="gcvit")
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class FeatExtract(tf.keras.layers.Layer):
     def __init__(self, keep_dim=False, **kwargs):
         super().__init__(**kwargs)
