@@ -30,12 +30,30 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 
 ## Installation
 ```bash
-pip install gcvit_tf
+pip install -U git+https://github.com/awsaf49/gcvit-tf
 ```
 
 ## Usage
+Load model using following codes,
 ```py
-from gcvit import GCVitTiny
+from gcvit import GCViTTiny
+model = GCViTTiny(pretrain=True)
+```
+Simple code to check model's prediction,
+```py
+from skimage.data import chelsea
+img = tf.keras.applications.imagenet_utils.preprocess_input(chelsea(), mode='torch') # Chelsea the cat
+img = tf.image.resize(img, (224, 224))[None,] # resize & create batch
+pred = model(img).numpy()
+print(tf.keras.applications.imagenet_utils.decode_predictions(pred)[0])
+```
+Prediction:
+```py
+[('n02124075', 'Egyptian_cat', 0.9194835),
+('n02123045', 'tabby', 0.009686623), 
+('n02123159', 'tiger_cat', 0.0061576385),
+('n02127052', 'lynx', 0.0011503297), 
+('n02883205', 'bow_tie', 0.00042479983)]
 ```
 
 ## To Do
