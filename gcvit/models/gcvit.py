@@ -98,6 +98,7 @@ def GCViTTiny(pretrain=False, **kwargs):
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, **config, **kwargs)
+    model(tf.random.uniform(shape=(1, 224, 224, 3)))
     if pretrain:
         ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -108,6 +109,7 @@ def GCViTSmall(pretrain=False, **kwargs):
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, **config, **kwargs)
+    model(tf.random.uniform(shape=(1, 224, 224, 3)))
     if pretrain:
         ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -118,6 +120,7 @@ def GCViTBase(pretrain=False, **kwargs):
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, **config, **kwargs)
+    model(tf.random.uniform(shape=(1, 224, 224, 3)))
     if pretrain:
         ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
