@@ -65,3 +65,34 @@ class GCViT(tf.keras.Model):
         """https://www.kaggle.com/code/ipythonx/tf-hybrid-efficientnet-swin-transformer-gradcam"""
         x = tf.keras.Input(shape=input_shape)
         return tf.keras.Model(inputs=[x], outputs=self.call(x))
+
+# load standard models
+def GCViTTiny(pretrain=False, **kwargs):
+    name = 'gcvit_tiny'
+    config = NAME2CONFIG[name]
+    ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
+    model = GCViT(**config, **kwargs)
+    if pretrain:
+        ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
+        model.load_weights(ckpt_path)
+    return model
+
+def GCViTSmall(pretrain=False, **kwargs):
+    name = 'gcvit_small'
+    config = NAME2CONFIG[name]
+    ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
+    model = GCViT(**config, **kwargs)
+    if pretrain:
+        ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
+        model.load_weights(ckpt_path)
+    return model
+
+def GCViTBase(pretrain=False, **kwargs):
+    name = 'gcvit_base'
+    config = NAME2CONFIG[name]
+    ckpt_link = '{}/{}/{}_weights.ckpt'.format(BASE_URL, TAG, name)
+    model = GCViT(**config, **kwargs)
+    if pretrain:
+        ckpt_path = tf.keras.utils.get_file('{}_weights.ckpt'.format(name), ckpt_link)
+        model.load_weights(ckpt_path)
+    return model
