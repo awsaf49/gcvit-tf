@@ -1,1 +1,1 @@
-from .models import GCViT
+from .models import GCViT, GCViTTiny, GCViTSmall, GCViTBase
