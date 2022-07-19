@@ -24,7 +24,7 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 <img src="./image/lvg_msa.PNG">
 
 ## Result
-> The reported result in the paper is shown in the paper. But due to issues in the **codebase** actual result differs from the reported result.
+> The reported result in the paper is shown in the figure. But due to issues in the **codebase** actual result differs from the reported result.
 
 <img src="./image/result.PNG" width=900>
 
