@@ -48,7 +48,6 @@ class GCViT(tf.keras.Model):
         self.head = tf.keras.layers.Dense(classes, activation=classifier_activation, name='head')
 
     def feature(self, inputs, **kwargs):
-        # Define model pipeline
         x = self.patch_embed(inputs)
         x = self.pos_drop(x)
         for level in self.levels:
