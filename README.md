@@ -57,7 +57,8 @@ Prediction:
 ```
 
 ## To Do
-- [ ] Port weights from official repo
+- [x] Build model with `tf.keras.Model`
+- [x] Port weights from official repo
 
 ## Acknowledgement
 * [GCVit](https://github.com/NVlabs/GCVit) (Official)
