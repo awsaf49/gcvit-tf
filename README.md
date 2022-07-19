@@ -1,7 +1,7 @@
 <h1 align="center">
 <p><a href='https://arxiv.org/pdf/2206.09959v1.pdf'>GCViT: Global Context Vision Transformer</a></p>
 </h1>
-<div align=center><img src="./image/lvg_arch.PNG" width=800></div>
+<div align=center><img src="https://i.ibb.co/1GpJTNS/lvg-arch.png" width=800></div>
 <p align="center">
 <a href="https://github.com/TensorSpeech/TensorFlowASR/blob/main/LICENSE">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
@@ -16,21 +16,26 @@
 This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf.keras.Model</code> manner to get PyTorch flavor.
 </p>
 
+
 ## Model
 * Architecture:
-<img src="./image/arch.PNG">
+
+<img src="https://i.ibb.co/PmQDjDF/arch.png">
 
 * Local Vs Global Attention:
-<img src="./image/lvg_msa.PNG">
+
+<img src="https://i.ibb.co/7Xg6QQt/lvg-msa.png">
 
 ## Result
 > The reported result in the paper is shown in the figure. But due to issues in the **codebase** actual result differs from the reported result.
 
-<img src="./image/result.PNG" width=900>
+<img src="https://i.ibb.co/YQ4CHQF/result.png" width=900>
 
 ## Installation
 ```bash
-pip install -U git+https://github.com/awsaf49/gcvit-tf
+pip install -U gcvit
+# or
+# pip install -U git+https://github.com/awsaf49/gcvit-tf
 ```
 
 ## Usage
