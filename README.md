@@ -1,7 +1,7 @@
 <h1 align="center">
 <p><a href='https://arxiv.org/pdf/2206.09959v1.pdf'>GCViT: Global Context Vision Transformer</a></p>
 </h1>
-<div align=center><img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/blob/main/image/lvg-arch.PNG" width=800></div>
+<div align=center><img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/lvg-arch.PNG" width=800></div>
 <p align="center">
 <a href="https://github.com/TensorSpeech/TensorFlowASR/blob/main/LICENSE">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
@@ -20,16 +20,16 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 ## Model
 * Architecture:
 
-<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/blob/main/image/arch.PNG">
+<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/arch.PNG">
 
 * Local Vs Global Attention:
 
-<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/blob/main/image/lvg-msa.PNG">
+<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/lvg-msa.PNG">
 
 ## Result
 > The reported result in the paper is shown in the figure. But due to issues in the **codebase** actual result differs from the reported result.
 
-<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/blob/main/image/result.PNG" width=900>
+<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/result.PNG" width=900>
 
 ## Installation
 ```bash
