@@ -1,6 +1,5 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
-from tensorflow.keras.utils import image_utils
 
 H_AXIS = -3
 W_AXIS = -2
@@ -169,7 +168,6 @@ class Resizing(tf.keras.layers.Layer):
         self.height = height
         self.width = width
         self.interpolation = interpolation
-        self._interpolation_method = image_utils.get_interpolation(interpolation)
         super().__init__(**kwargs)
 
     def call(self, inputs):
@@ -185,7 +183,7 @@ class Resizing(tf.keras.layers.Layer):
         outputs = tf.image.resize(
             inputs,
             size=size,
-            method=self._interpolation_method)
+            method=self.interpolation)
         return tf.cast(outputs, self.compute_dtype)
 
     def compute_output_shape(self, input_shape):
