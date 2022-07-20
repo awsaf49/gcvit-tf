@@ -1,1 +1,5 @@
-tensorflow_addons
+tensorflow==2.4.1
+tensorflow_addons==0.14.0
+gradio==3.1.0
+numpy
+matplotlib
