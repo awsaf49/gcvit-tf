@@ -32,7 +32,7 @@ NAME2CONFIG = {
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
         drop_rate=0., mlp_ratio=3., qkv_bias=True, qk_scale=None, attn_drop=0., path_drop=0.1, layer_scale=None, resize_query=False,
-        pooling='avg', classes=1000, classifier_activation='softmax', **kwargs):
+        global_pool='avg', num_classes=1000, head_act='softmax', **kwargs):
         super().__init__(**kwargs)
         self.window_size = window_size
         self.dim = dim
@@ -46,9 +46,9 @@ class GCViT(tf.keras.Model):
         self.path_drop = path_drop
         self.layer_scale = layer_scale
         self.resize_query = resize_query
-        self.pooling = pooling
-        self.classes = classes
-        self.classifier_activation = classifier_activation
+        self.global_pool = global_pool
+        self.num_classes = num_classes
+        self.head_act = head_act
 
         self.patch_embed = PatchEmbed(dim=dim, name='patch_embed')
         self.pos_drop = tf.keras.layers.Dropout(drop_rate, name='pos_drop')
@@ -63,28 +63,45 @@ class GCViT(tf.keras.Model):
                     name=f'levels/{i}')
             self.levels.append(level)
         self.norm = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm')
-        if pooling == 'avg':
+        if global_pool == 'avg':
             self.pool = tf.keras.layers.GlobalAveragePooling2D(name='pool')
-        elif pooling == 'max':
+        elif global_pool == 'max':
             self.pool = tf.keras.layers.GlobalMaxPooling2D(name='pool')
-        elif pooling is None:
+        elif global_pool is None:
             self.pool = Identity(name='pool')
         else:
             raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {pooling}')
-        self.head = tf.keras.layers.Dense(classes, activation=classifier_activation, name='head')
+        self.head = [tf.keras.layers.Dense(num_classes, name='head/fc'),
+                     tf.keras.layers.Activation(head_act, name='head/act')]
 
-    def feature(self, inputs, **kwargs):
+    def reset_classifier(self, num_classes, head_act, global_pool=None):
+        self.num_classes = num_classes
+        if global_pool is not None:
+            self.global_pool = global_pool
+        self.head[0] = tf.keras.layers.Dense(num_classes, name='head/fc') if num_classes else Identity(name='head/fc')
+        self.head[1] = tf.keras.layers.Activation(head_act, name='head/act') if head_act else Identity(name='head/act')
+
+    def forward_features(self, inputs):
         x = self.patch_embed(inputs)
         x = self.pos_drop(x)
+        x = tf.cast(x, dtype=tf.float32)
         for level in self.levels:
             x = level(x)
         x = self.norm(x)
-        x = self.pool(x)
         return x
 
+    def forward_head(self, inputs, pre_logits=False):
+        x = inputs
+        if self.global_pool in ['avg', 'max']:
+            x = self.pool(x)
+        if not pre_logits:
+            for layer in self.head:
+                x = layer(x)
+        return x 
+
     def call(self, inputs, **kwargs):
-        x = self.feature(inputs)
-        x = self.head(x)
+        x = self.forward_features(inputs)
+        x = self.forward_head(x)
         return x
 
     def build_graph(self, input_shape=(224, 224, 3)):

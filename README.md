@@ -60,7 +60,17 @@ Prediction:
 ('n02127052', 'lynx', 0.0011503297), 
 ('n02883205', 'bow_tie', 0.00042479983)]
 ```
-
+For feature extraction:
+```py
+model = GCViTTiny(pretrain=True)  # when pretrain=True, num_classes must be 1000
+model.reset_classifer(num_classes=0, head_act=None)
+feature = model(img)
+print(feature.shape)
+```
+Feature:
+```py
+(None, 7, 7, 512)
+```
 ## To Do
 - [ ] Working training example.
 - [ ] GradCAM showcase.
