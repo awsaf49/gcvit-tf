@@ -5,7 +5,7 @@ from ..layers import PatchEmbed, GCViTLayer, Identity
 
 
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
-TAG = 'v1.0.0'
+TAG = 'v1.0.4'
 NAME2CONFIG = {
     'gcvit_tiny': {'window_size': (7, 7, 14, 7),
                     'dim': 64,
