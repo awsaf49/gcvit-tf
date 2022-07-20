@@ -111,34 +111,34 @@ class GCViT(tf.keras.Model):
         return tf.keras.Model(inputs=[x], outputs=self.call(x), name=self.name)
 
 # load standard models
-def GCViTTiny(pretrain=False, **kwargs):
+def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_tiny'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
-    model = GCViT(name=name, **config, **kwargs)
-    model(tf.random.uniform(shape=(1, 224, 224, 3)))
+    model = GCViT(name=name, resize_query=resize_query, **config,  **kwargs)
+    model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTSmall(pretrain=False, **kwargs):
+def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_small'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
-    model = GCViT(name=name, **config, **kwargs)
-    model(tf.random.uniform(shape=(1, 224, 224, 3)))
+    model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
+    model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTBase(pretrain=False, **kwargs):
+def GCViTBase(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_base'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
-    model = GCViT(name=name, **config, **kwargs)
-    model(tf.random.uniform(shape=(1, 224, 224, 3)))
+    model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
+    model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
