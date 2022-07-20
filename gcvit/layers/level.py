@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from .feature import FeatExtract, ReduceSize
+from .feature import FeatExtract, ReduceSize, Resizing
 from .block import GCViTBlock
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
@@ -41,7 +41,7 @@ class GCViTLayer(tf.keras.layers.Layer):
         self.to_q_global = [
             FeatExtract(keep_dim, name=f'to_q_global/{i}')
             for i, keep_dim in enumerate(self.keep_dims)]
-        self.resize = tf.keras.layers.Resizing(self.window_size, self.window_size, interpolation='bicubic')
+        self.resize = Resizing(self.window_size, self.window_size, interpolation='bicubic')
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):

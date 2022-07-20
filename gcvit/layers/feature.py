@@ -1,7 +1,9 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
+from tensorflow.keras.utils import image_utils
 
-
+H_AXIS = -3
+W_AXIS = -2
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class Mlp(tf.keras.layers.Layer):
@@ -41,7 +43,6 @@ class Mlp(tf.keras.layers.Layer):
             })
         return config
 
-
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class SE(tf.keras.layers.Layer):
     def __init__(self, oup=None, expansion=0.25, **kwargs):
@@ -76,7 +77,6 @@ class SE(tf.keras.layers.Layer):
             'oup': self.oup,
             })
         return config
-
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class ReduceSize(tf.keras.layers.Layer):
@@ -157,4 +157,48 @@ class FeatExtract(tf.keras.layers.Layer):
         config.update({
             "keep_dim":self.keep_dim,
         })
+        return config
+    
+@tf.keras.utils.register_keras_serializable(package="gcvit")    
+class Resizing(tf.keras.layers.Layer):
+    def __init__(self,
+               height,
+               width,
+               interpolation='bilinear',
+               **kwargs):
+        self.height = height
+        self.width = width
+        self.interpolation = interpolation
+        self._interpolation_method = image_utils.get_interpolation(interpolation)
+        super().__init__(**kwargs)
+
+    def call(self, inputs):
+        # tf.image.resize will always output float32 and operate more efficiently on
+        # float32 unless interpolation is nearest, in which case ouput type matches
+        # input type.
+        if self.interpolation == 'nearest':
+            input_dtype = self.compute_dtype
+        else:
+            input_dtype = tf.float32
+        inputs = tf.cast(inputs, dtype=input_dtype)
+        size = [self.height, self.width]
+        outputs = tf.image.resize(
+            inputs,
+            size=size,
+            method=self._interpolation_method)
+        return tf.cast(outputs, self.compute_dtype)
+
+    def compute_output_shape(self, input_shape):
+        input_shape = tf.TensorShape(input_shape).as_list()
+        input_shape[H_AXIS] = self.height
+        input_shape[W_AXIS] = self.width
+        return tf.TensorShape(input_shape)
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'height': self.height,
+            'width': self.width,
+            'interpolation': self.interpolation,
+            })
         return config
