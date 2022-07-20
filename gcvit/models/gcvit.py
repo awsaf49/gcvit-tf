@@ -80,7 +80,8 @@ class GCViT(tf.keras.Model):
             self.global_pool = global_pool
         self.head[0] = tf.keras.layers.Dense(num_classes, name='head/fc') if num_classes else Identity(name='head/fc')
         self.head[1] = tf.keras.layers.Activation(head_act, name='head/act') if head_act else Identity(name='head/act')
-
+        super().build((1, 224, 224, 3))
+        
     def forward_features(self, inputs):
         x = self.patch_embed(inputs)
         x = self.pos_drop(x)
