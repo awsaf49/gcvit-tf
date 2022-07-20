@@ -76,6 +76,12 @@ Feature:
 ```py
 (None, 7, 7, 512)
 ```
+
+## Example
+* For live demo on Image Classification & Grad-CAM, with **ImageNet** weights, click <a target="_blank" href="https://huggingface.co/spaces/awsaf49/gcvit-tf"><img src="https://img.shields.io/badge/Try%20on-Gradio-orange"></a> powered by 🤗 Space and Gradio. here's an example,
+
+<a href="https://huggingface.co/spaces/awsaf49/gcvit-tf"><img src="image/gradio_demo.JPG" height=500></a>
+
 ## To Do
 - [ ] Working training example in Colab & Kaggle.
 - [x] GradCAM showcase.
