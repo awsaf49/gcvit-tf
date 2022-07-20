@@ -8,7 +8,7 @@ def predict_fn(image, model_name):
     model = getattr(gcvit, model_name)(pretrain=True)
     gradcam_model = get_gradcam_model(model)
     preds, overlay = get_gradcam_prediction(image, gradcam_model, cmap='jet', alpha=0.4, pred_index=None)
-    preds = {x[1]:x[2] for x in preds}
+    preds = {x[1]:float(x[2]) for x in preds}
     return [preds, overlay]
 
 demo = gr.Interface(
@@ -22,12 +22,17 @@ demo = gr.Interface(
         gr.inputs.Image(label="GradCAM"),
     ],
     title="Global Context Vision Transformer (GCViT) Demo",
-    description="ImageNet Pretrain.",
+    description="Image Classification with ImageNet Pretrain Models.",
     examples=[
-        ["example/african_elephant.png"],
-        ["example/chelsea.png"],
-        ["example/german_shepherd.jpg"],
-        ["example/panda.jpg"],
+        ["example/hot_air_ballon.jpg", 'GCViTTiny'],
+        ["example/chelsea.png", 'GCViTTiny'],
+        ["example/german_shepherd.jpg", 'GCViTTiny'],
+        ["example/panda.jpg", 'GCViTTiny'],
+        ["example/jellyfish.jpg", 'GCViTTiny'],
+        ["example/penguin.JPG", 'GCViTTiny'],
+        ["example/bus.jpg", 'GCViTTiny'],
+        ["example/cat_dog.JPG", 'GCViTTiny'],
+        
     ],
 )
 demo.launch()
