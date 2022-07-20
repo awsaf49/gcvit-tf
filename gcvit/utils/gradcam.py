@@ -1,6 +1,10 @@
 import tensorflow as tf
 import matplotlib.cm as cm
 import numpy as np
+try:
+    from tensorflow.keras.utils import array_to_img, img_to_array
+except:
+    from tensorflow.keras.preprocessing.image import array_to_img, img_to_array
 
 def process_image(img, size=(224, 224)):
     img_array = tf.keras.applications.imagenet_utils.preprocess_input(img, mode='torch')
@@ -35,11 +39,11 @@ def get_gradcam_prediction(img, grad_model, pred_index=None, cmap='jet', alpha=0
     cmap = cm.get_cmap(cmap)
     colors = cmap(np.arange(256))[:, :3]
     heatmap = colors[heatmap]
-    heatmap = tf.keras.utils.array_to_img(heatmap)
+    heatmap = array_to_img(heatmap)
     heatmap = heatmap.resize((img.shape[1], img.shape[0]))
-    heatmap = tf.keras.utils.img_to_array(heatmap)
+    heatmap = img_to_array(heatmap)
     overlay = img + heatmap * alpha
-    overlay = tf.keras.utils.array_to_img(overlay)
+    overlay = array_to_img(overlay)
     # decode prediction
     preds_decode = tf.keras.applications.imagenet_utils.decode_predictions(preds.numpy())[0]
     return preds_decode, overlay
