@@ -17,9 +17,26 @@ def get_gradcam_model(model):
     preds = model.forward_head(feats)
     return tf.keras.models.Model(inp, [preds, feats])
 
-def get_gradcam_prediction(img, grad_model, pred_index=None, cmap='jet', alpha=0.4):
+def get_gradcam_prediction(img, grad_model, process=True, pred_index=None, cmap='jet', alpha=0.4):
+    """Grad-CAM for a single image
+
+    Args:
+        img (np.ndarray): process or raw image with batch_shape e.g. (1, 224, 224, 3)
+        grad_model (tf.keras.Model): model with feature map and prediction
+        process (bool, optional): imagenet pre-processing. Defaults to True.
+        pred_index (int, optional): for particular calss. Defaults to None.
+        cmap (str, optional): colormap. Defaults to 'jet'.
+        alpha (float, optional): opacity. Defaults to 0.4.
+
+    Returns:
+        preds_decode: top5 predictions
+        heatmap: gradcam heatmap
+    """
     # process image for inference
-    img_array = process_image(img)
+    if process:
+        img_array = process_image(img)
+    else:
+        img_array = tf.convert_to_tensor(img)
     # get prediction
     with tf.GradientTape(persistent=True) as tape:
         preds, feats = grad_model(img_array)
