@@ -70,7 +70,7 @@ class GCViT(tf.keras.Model):
         elif global_pool is None:
             self.pool = Identity(name='pool')
         else:
-            raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {pooling}')
+            raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {global_pool}')
         self.head = [tf.keras.layers.Dense(num_classes, name='head/fc'),
                      tf.keras.layers.Activation(head_act, name='head/act')]
 
