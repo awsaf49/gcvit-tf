@@ -7,7 +7,7 @@
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
 </a>
 <img alt="python" src="https://img.shields.io/badge/python-%3E%3D3.6-blue?logo=python">
-<img alt="tensorflow" src="https://img.shields.io/badge/tensorflow-%3E%3D2.5.1-orange?logo=tensorflow">
+<img alt="tensorflow" src="https://img.shields.io/badge/tensorflow-%3E%3D2.4.1-orange?logo=tensorflow">
 <h2 align="center">
 <p>Tensorflow 2.0 Implementation of GCViT</p>
 </h2>
@@ -77,6 +77,7 @@ Feature:
 - [ ] Gradio Demo.
 - [x] Build model with `tf.keras.Model`.
 - [x] Port weights from official repo.
+- [x] Support for `TPU`.
 
 ## Acknowledgement
 * [GCVit](https://github.com/NVlabs/GCVit) (Official)
