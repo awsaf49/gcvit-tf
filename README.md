@@ -3,11 +3,16 @@
 </h1>
 <div align=center><img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/lvg_arch.PNG" width=800></div>
 <p align="center">
-<a href="https://github.com/TensorSpeech/TensorFlowASR/blob/main/LICENSE">
+<a href="https://github.com/awsaf49/gcvit-tf/blob/main/LICENSE.md">
   <img src="https://img.shields.io/badge/License-MIT-yellow.svg">
 </a>
 <img alt="python" src="https://img.shields.io/badge/python-%3E%3D3.6-blue?logo=python">
 <img alt="tensorflow" src="https://img.shields.io/badge/tensorflow-%3E%3D2.4.1-orange?logo=tensorflow">
+<div align=center><p>
+<a target="_blank" href="https://huggingface.co/spaces/awsaf49/gcvit-tf"><img src="https://img.shields.io/badge/Try%20on-Gradio-orange"></a>
+<a href="https://colab.research.google.com/dg" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+<a href="https://www.kaggle.com/awsaf49"><img src="https://kaggle.com/static/images/open-in-kaggle.svg" alt="Open In Kaggle"></a>
+</p></div>
 <h2 align="center">
 <p>Tensorflow 2.0 Implementation of GCViT</p>
 </h2>
@@ -72,9 +77,9 @@ Feature:
 (None, 7, 7, 512)
 ```
 ## To Do
-- [ ] Working training example.
-- [ ] GradCAM showcase.
-- [ ] Gradio Demo.
+- [ ] Working training example in Colab & Kaggle.
+- [x] GradCAM showcase.
+- [x] Gradio Demo.
 - [x] Build model with `tf.keras.Model`.
 - [x] Port weights from official repo.
 - [x] Support for `TPU`.
