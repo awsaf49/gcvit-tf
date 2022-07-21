@@ -217,8 +217,6 @@ class FitWindow(tf.keras.layers.Layer):
                             [h_pad//2, (h_pad//2 + h_pad%2)],  # padding in both directions unlike tfgcvit
                             [w_pad//2, (w_pad//2 + w_pad%2)],
                             [0, 0]])
-        padded_H, padded_W = (H + h_pad, W + w_pad)
-        x.set_shape([B, padded_H, padded_W, C])
         return x
 
     def get_config(self):
