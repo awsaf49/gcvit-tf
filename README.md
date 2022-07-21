@@ -87,13 +87,22 @@ Feature map:
 (None, 7, 7, 512)
 ```
 
-## Example
+## Live-Demo
 * For live demo on Image Classification & Grad-CAM, with **ImageNet** weights, click <a target="_blank" href="https://huggingface.co/spaces/awsaf49/gcvit-tf"><img src="https://img.shields.io/badge/Try%20on-Gradio-orange"></a> powered by 🤗 Space and Gradio. here's an example,
 
 <a href="https://huggingface.co/spaces/awsaf49/gcvit-tf"><img src="image/gradio_demo.JPG" height=500></a>
 
+# Example
+For working training example checkout these notebooks on **Google Colab** <a href="https://colab.research.google.com/github/awsaf49/gcvit-tf/blob/main/notebooks/GCViT_Flower_Classification.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a> & **Kaggle** <a href="https://www.kaggle.com/awsaf49/flower-classification-gcvit-global-context-vit"><img src="https://kaggle.com/static/images/open-in-kaggle.svg" alt="Open In Kaggle"></a>.
+
+Here is grad-cam result after training on Flower Classification Dataset,
+
+<img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/flower_gradcam.PNG" height=500>
+
+
+
 ## To Do
-- [ ] Working training example in Colab & Kaggle.
+- [x] Working training example in Colab & Kaggle.
 - [x] GradCAM showcase.
 - [x] Gradio Demo.
 - [x] Build model with `tf.keras.Model`.
