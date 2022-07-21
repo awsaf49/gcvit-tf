@@ -74,6 +74,16 @@ print(feature.shape)
 ```
 Feature:
 ```py
+(None, 512)
+```
+For feature map:
+```py
+model = GCViTTiny(pretrain=True)  # when pretrain=True, num_classes must be 1000
+feature = model.forward_features(img)
+print(feature.shape)
+```
+Feature map:
+```py
 (None, 7, 7, 512)
 ```
 
