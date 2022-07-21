@@ -110,6 +110,9 @@ class GCViT(tf.keras.Model):
         x = tf.keras.Input(shape=input_shape)
         return tf.keras.Model(inputs=[x], outputs=self.call(x), name=self.name)
 
+    def summary(self, input_shape=(224, 224, 3)):
+        return self.build_graph(input_shape).summary()
+
 # load standard models
 def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_tiny'
