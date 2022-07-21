@@ -200,3 +200,30 @@ class Resizing(tf.keras.layers.Layer):
             'interpolation': self.interpolation,
             })
         return config
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
+class FitWindow(tf.keras.layers.Layer):
+    "Pad feature to fit window"
+    def __init__(self, window_size, **kwargs):
+        super().__init__(**kwargs)
+        self.window_size = window_size
+
+    def call(self, inputs):
+        B, H, W, C = tf.unstack(tf.shape(inputs), num=4)
+        # pad to multiple of window_size
+        h_pad = (self.window_size - H % self.window_size) % self.window_size
+        w_pad = (self.window_size - W % self.window_size) % self.window_size
+        x = tf.pad(inputs, [[0, 0],
+                            [h_pad//2, (h_pad//2 + h_pad%2)],  # padding in both directions unlike tfgcvit
+                            [w_pad//2, (w_pad//2 + w_pad%2)],
+                            [0, 0]])
+        padded_H, padded_W = (H + h_pad, W + w_pad)
+        x.set_shape([B, padded_H, padded_W, C])
+        return x
+
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            'window_size': self.window_size,
+            })
+        return config

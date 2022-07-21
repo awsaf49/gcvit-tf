@@ -45,14 +45,9 @@ class GCViTLayer(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
-        height, width = tf.unstack(tf.shape(inputs)[1:3], num=2)
-        # pad to multiple of window_size
-        h_pad = (self.window_size - height % self.window_size) % self.window_size
-        w_pad = (self.window_size - width % self.window_size) % self.window_size
-        x = tf.pad(inputs, [[0, 0],
-                            [h_pad//2, (h_pad//2 + h_pad%2)],  # padding in both directions unlike tfgcvit
-                            [w_pad//2, (w_pad//2 + w_pad%2)],
-                            [0, 0]])
+        H, W = tf.unstack(tf.shape(inputs)[1:3], num=2)
+        # pad to fit window_size
+        x = self.fit_window(inputs)
         # generate global query
         q_global = x  # (B, H, W, C)
         for layer in self.to_q_global:
@@ -66,7 +61,7 @@ class GCViTLayer(tf.keras.layers.Layer):
                 x = blk([x, q_global])
             else:
                 x = blk([x])
-        x = x[:, :height, :width, :]  # https://github.com/NVlabs/GCVit/issues/9
+        x = x[:, :H, :W, :]  # https://github.com/NVlabs/GCVit/issues/9
         # set shape for [B, ?, ?, C]
         x.set_shape(inputs.shape)  # `tf.reshape` creates new tensor with new_shape
         # downsample
