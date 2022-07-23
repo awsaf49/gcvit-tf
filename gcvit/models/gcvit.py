@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from ..layers import PatchEmbed, GCViTLayer, Identity
+from ..layers import PatchEmbed, GCViTLevel, Identity
 
 
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
@@ -57,7 +57,7 @@ class GCViT(tf.keras.Model):
         self.levels = []
         for i in range(len(depths)):
             path_drop = path_drops[sum(depths[:i]):sum(depths[:i + 1])].tolist()
-            level = GCViTLayer(depth=depths[i], num_heads=num_heads[i], window_size=window_size[i], keep_dims=keep_dims[i],
+            level = GCViTLevel(depth=depths[i], num_heads=num_heads[i], window_size=window_size[i], keep_dims=keep_dims[i],
                     downsample=(i < len(depths) - 1), mlp_ratio=mlp_ratio, qkv_bias=qkv_bias, qk_scale=qk_scale, 
                     drop=drop_rate, attn_drop=attn_drop, path_drop=path_drop, layer_scale=layer_scale, resize_query=resize_query,
                     name=f'levels/{i}')

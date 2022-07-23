@@ -4,7 +4,7 @@ from .feature import FeatExtract, ReduceSize, Resizing, FitWindow
 from .block import GCViTBlock
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
-class GCViTLayer(tf.keras.layers.Layer):
+class GCViTLevel(tf.keras.layers.Layer):
     def __init__(self, depth, num_heads, window_size, keep_dims, downsample=True, mlp_ratio=4., qkv_bias=True, 
                 qk_scale=None, drop=0., attn_drop=0., path_drop=0., layer_scale=None, resize_query=False, **kwargs):
         super().__init__(**kwargs)
