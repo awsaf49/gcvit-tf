@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from ..layers import PatchEmbed, GCViTLevel, Identity
+from ..layers import Stem, GCViTLevel, Identity
 
 
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
@@ -50,7 +50,7 @@ class GCViT(tf.keras.Model):
         self.num_classes = num_classes
         self.head_act = head_act
 
-        self.patch_embed = PatchEmbed(dim=dim, name='patch_embed')
+        self.patch_embed = Stem(dim=dim, name='patch_embed')
         self.pos_drop = tf.keras.layers.Dropout(drop_rate, name='pos_drop')
         path_drops = np.linspace(0., path_drop, sum(depths))
         keep_dims = [(False, False, False),(False, False),(True,),(True,),]

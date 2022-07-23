@@ -4,7 +4,7 @@ from .feature import ReduceSize
 
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
-class PatchEmbed(tf.keras.layers.Layer):
+class Stem(tf.keras.layers.Layer):
     def __init__(self, dim, **kwargs):
         super().__init__(**kwargs)
         self.dim = dim
