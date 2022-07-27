@@ -68,7 +68,7 @@ Prediction:
 For feature extraction:
 ```py
 model = GCViTTiny(pretrain=True)  # when pretrain=True, num_classes must be 1000
-model.reset_classifer(num_classes=0, head_act=None)
+model.reset_classifier(num_classes=0, head_act=None)
 feature = model(img)
 print(feature.shape)
 ```
