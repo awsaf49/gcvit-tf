@@ -9,7 +9,7 @@ TAG = 'v1.0.4'
 NAME2CONFIG = {
     'gcvit_xxtiny': {'window_size': (7, 7, 14, 7),
                     'dim': 64,
-                    'depths': (2, 2, 6, 3),
+                    'depths': (2, 2, 6, 2),
                     'num_heads': (2, 4, 8, 16),
                     'mlp_ratio': 3.,
                     'path_drop': 0.2},
