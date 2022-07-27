@@ -158,6 +158,34 @@ class FeatExtract(tf.keras.layers.Layer):
         })
         return config
     
+@tf.keras.utils.register_keras_serializable(package="gcvit")
+class  GlobalQueryGen(tf.keras.layers.Layer):
+    """
+    Global query generator based on: "Hatamizadeh et al.,
+    Global Context Vision Transformers <https://arxiv.org/abs/2206.09959>"
+    """
+    def __init__(self, keep_dims=False, **kwargs):
+        super().__init__(**kwargs)
+        self.keep_dims = keep_dims
+        
+    def build(self, input_shape):
+        self.to_q_global = [FeatExtract(keep_dim, name=f'to_q_global/{i}') \
+                            for i, keep_dim in enumerate(self.keep_dims)]
+        super().build(input_shape)
+        
+    def call(self, inputs, **kwargs):
+        x = inputs
+        for layer in self.to_q_global:
+            x = layer(x)
+        return x
+    
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "keep_dims":self.keep_dims,
+        })
+        return config
+    
 @tf.keras.utils.register_keras_serializable(package="gcvit")    
 class Resizing(tf.keras.layers.Layer):
     def __init__(self,

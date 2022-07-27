@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from .feature import FeatExtract, ReduceSize, Resizing, FitWindow
+from .feature import GlobalQueryGen, ReduceSize, Resizing, FitWindow
 from .block import GCViTBlock
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
@@ -38,9 +38,7 @@ class GCViTLevel(tf.keras.layers.Layer):
                       name=f'blocks/{i}')
             for i in range(self.depth)]
         self.down = ReduceSize(keep_dim=False, name='downsample')
-        self.to_q_global = [
-            FeatExtract(keep_dim, name=f'to_q_global/{i}')
-            for i, keep_dim in enumerate(self.keep_dims)]
+        self.q_global_gen = GlobalQueryGen(self.keep_dims, name='q_global_gen')
         self.resize = Resizing(self.window_size, self.window_size, interpolation='bicubic')
         self.fit_window = FitWindow(self.window_size)
         super().build(input_shape)
@@ -50,9 +48,7 @@ class GCViTLevel(tf.keras.layers.Layer):
         # pad to fit window_size
         x = self.fit_window(inputs)
         # generate global query
-        q_global = x  # (B, H, W, C)
-        for layer in self.to_q_global:
-            q_global = layer(q_global)  #  official impl issue: https://github.com/NVlabs/GCVit/issues/13
+        q_global = self.q_global_gen(x) # (B, H, W, C)  # official impl issue: https://github.com/NVlabs/GCVit/issues/13
         # resize query to fit key-value, but result in poor score with official weights?
         if self.resize_query:
             q_global = self.resize(q_global)  # to avoid mismatch between feat_map and q_global: https://github.com/NVlabs/GCVit/issues/9
