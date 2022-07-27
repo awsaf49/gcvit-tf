@@ -1,1 +1,1 @@
-from .gcvit import GCViT, GCViTTiny, GCViTSmall, GCViTBase
+from .gcvit import GCViT, GCViTXXTiny, GCViTXTiny, GCViTTiny, GCViTSmall, GCViTBase
