@@ -3,14 +3,27 @@ import tensorflow as tf
 
 from ..layers import Stem, GCViTLevel, Identity
 
-
+                  
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
 TAG = 'v1.0.4'
 NAME2CONFIG = {
+    'gcvit_xxtiny': {'window_size': (7, 7, 14, 7),
+                    'dim': 64,
+                    'depths': (2, 2, 6, 3),
+                    'num_heads': (2, 4, 8, 16),
+                    'mlp_ratio': 3.,
+                    'path_drop': 0.2},
+    'gcvit_xtiny': {'window_size': (7, 7, 14, 7),
+                    'dim': 64,
+                    'depths': (3, 4, 6, 5),
+                    'num_heads': (2, 4, 8, 16),
+                    'mlp_ratio': 3.,
+                    'path_drop': 0.2},
     'gcvit_tiny': {'window_size': (7, 7, 14, 7),
                     'dim': 64,
                     'depths': (3, 4, 19, 5),
-                    'num_heads': (2, 4, 8, 16), 
+                    'num_heads': (2, 4, 8, 16),
+                    'mlp_ratio': 3.,
                     'path_drop': 0.2,},
     'gcvit_small': {'window_size': (7, 7, 14, 7), 
                      'dim': 96, 
@@ -114,6 +127,28 @@ class GCViT(tf.keras.Model):
         return self.build_graph(input_shape).summary()
 
 # load standard models
+def GCViTXXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+    name = 'gcvit_xxtiny'
+    config = NAME2CONFIG[name]
+    ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
+    model = GCViT(name=name, resize_query=resize_query, **config,  **kwargs)
+    model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
+    if pretrain:
+        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        model.load_weights(ckpt_path)
+    return model
+
+def GCViTXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+    name = 'gcvit_xtiny'
+    config = NAME2CONFIG[name]
+    ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
+    model = GCViT(name=name, resize_query=resize_query, **config,  **kwargs)
+    model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
+    if pretrain:
+        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        model.load_weights(ckpt_path)
+    return model
+
 def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_tiny'
     config = NAME2CONFIG[name]
