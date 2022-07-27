@@ -32,9 +32,17 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 <img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/lvg_msa.PNG">
 
 ## Result
-> The reported result in the paper is shown in the figure. But due to issues in the **codebase** actual result differs from the reported result.
-
 <img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/result.PNG" width=900>
+
+Official codebase had some issue which has been fixed recently (27 July 2022). Here's the result of ported weights on **ImageNetV2-Test** data,
+
+| Model        | Acc@1 | Acc@5 | #Params |
+|--------------|-------|-------|---------|
+| GCViT-XXTiny | 63    | 85    | 12M     |
+| GCViT-XTiny  | 66    | 87    | 20M     |
+| GCViT-Tiny   | 69    | 89    | 28M     |
+| GCViT-Small  | 69    | 89    | 51M     |
+| GCViT-Base   | 71    | 90    | 90M     |
 
 ## Installation
 ```bash
@@ -102,6 +110,7 @@ Here is grad-cam result after training on Flower Classification Dataset,
 
 
 ## To Do
+- [x] New updated weights have been added.
 - [x] Working training example in Colab & Kaggle.
 - [x] GradCAM showcase.
 - [x] Gradio Demo.
