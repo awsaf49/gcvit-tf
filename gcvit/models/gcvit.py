@@ -84,15 +84,13 @@ class GCViT(tf.keras.Model):
             self.pool = Identity(name='pool')
         else:
             raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {global_pool}')
-        self.head = [tf.keras.layers.Dense(num_classes, name='head/fc'),
-                     tf.keras.layers.Activation(head_act, name='head/act')]
+        self.head = tf.keras.layers.Dense(num_classes, name='head', activation=head_act)
 
     def reset_classifier(self, num_classes, head_act, global_pool=None, in_channels=3):
         self.num_classes = num_classes
         if global_pool is not None:
             self.global_pool = global_pool
-        self.head[0] = tf.keras.layers.Dense(num_classes, name='head/fc') if num_classes else Identity(name='head/fc')
-        self.head[1] = tf.keras.layers.Activation(head_act, name='head/act') if head_act else Identity(name='head/act')
+        self.head = tf.keras.layers.Dense(num_classes, name='head', activation=head_act) if num_classes else Identity(name='head')
         super().build((1, 224, 224, in_channels)) # for head we only need info from the input channel
         
     def forward_features(self, inputs):
