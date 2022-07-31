@@ -107,8 +107,7 @@ class GCViT(tf.keras.Model):
         if self.global_pool in ['avg', 'max']:
             x = self.pool(x)
         if not pre_logits:
-            for layer in self.head:
-                x = layer(x)
+            x = self.head(x)
         return x 
 
     def call(self, inputs, **kwargs):
