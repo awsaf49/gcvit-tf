@@ -34,15 +34,15 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf
 ## Result
 <img src="https://raw.githubusercontent.com/awsaf49/gcvit-tf/main/image/result.PNG" width=900>
 
-Official codebase had some issue which has been fixed recently (27 July 2022). Here's the result of ported weights on **ImageNetV2-Test** data,
+Official codebase had some issue which has been fixed recently (12 August 2022). Here's the result of ported weights on **ImageNetV2-Test** data,
 
 | Model        | Acc@1 | Acc@5 | #Params |
 |--------------|-------|-------|---------|
-| GCViT-XXTiny | 63    | 85    | 12M     |
-| GCViT-XTiny  | 66    | 87    | 20M     |
-| GCViT-Tiny   | 69    | 89    | 28M     |
-| GCViT-Small  | 69    | 89    | 51M     |
-| GCViT-Base   | 71    | 90    | 90M     |
+| GCViT-XXTiny | 66    | 87    | 12M     |
+| GCViT-XTiny  | 69    | 88    | 20M     |
+| GCViT-Tiny   | 71    | 90    | 28M     |
+| GCViT-Small  | 72    | 90    | 51M     |
+| GCViT-Base   | 73    | 91    | 90M     |
 
 ## Installation
 ```bash
