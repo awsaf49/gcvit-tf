@@ -113,6 +113,7 @@ Here is grad-cam result after training on Flower Classification Dataset,
 
 
 ## To Do
+- [ ] Segmentation Pipeline
 - [x] New updated weights have been added.
 - [x] Working training example in Colab & Kaggle.
 - [x] GradCAM showcase.
