@@ -18,7 +18,7 @@
 </h2>
 </p>
 <p align="center">
-This library implements <b>GCViT</b> using Tensorflow 2.0 specifally in <code>tf.keras.Model</code> manner to get PyTorch flavor.
+This library implements <b>GCViT</b> using Tensorflow 2.0 specifically in <code>tf.keras.Model</code> manner to get PyTorch flavor.
 </p>
 
 ## Update
