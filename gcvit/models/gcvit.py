@@ -39,6 +39,13 @@ NAME2CONFIG = {
                     'mlp_ratio': 2.,
                     'path_drop': 0.5,
                     'layer_scale': 1e-5,},
+    'gcvit_large': {'window_size': (7, 7, 14, 7),
+                    'dim':192, 
+                    'depths': (3, 4, 19, 5),
+                    'num_heads': (6, 12, 24, 48),
+                    'mlp_ratio': 2.,
+                    'path_drop': 0.5,
+                    'layer_scale': 1e-5,},
     }
 
 @tf.keras.utils.register_keras_serializable(package='gcvit')
@@ -170,6 +177,17 @@ def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **
 
 def GCViTBase(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_base'
+    config = NAME2CONFIG[name]
+    ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
+    model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
+    model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
+    if pretrain:
+        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        model.load_weights(ckpt_path)
+    return model
+
+def GCViTLarge(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+    name = 'gcvit_large'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
