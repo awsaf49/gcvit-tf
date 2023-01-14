@@ -5,7 +5,7 @@ from ..layers import Stem, GCViTLevel, Identity
 
                   
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
-TAG = 'v1.0.9'
+TAG = 'v1.1.1'
 NAME2CONFIG = {
     'gcvit_xxtiny': {'window_size': (7, 7, 14, 7),
                     'dim': 64,
