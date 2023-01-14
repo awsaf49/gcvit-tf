@@ -41,11 +41,12 @@ Official codebase had some issue which has been fixed recently (12 August 2022).
 
 | Model        | Acc@1 | Acc@5 | #Params |
 |--------------|-------|-------|---------|
-| GCViT-XXTiny | 66    | 87    | 12M     |
-| GCViT-XTiny  | 69    | 88    | 20M     |
-| GCViT-Tiny   | 71    | 90    | 28M     |
-| GCViT-Small  | 72    | 90    | 51M     |
-| GCViT-Base   | 73    | 91    | 90M     |
+| GCViT-XXTiny | 0.663    | 0.873    | 12M     |
+| GCViT-XTiny  | 0.685    | 0.885    | 20M     |
+| GCViT-Tiny   | 0.708    | 0.899    | 28M     |
+| GCViT-Small  | 0.720    | 0.901    | 51M     |
+| GCViT-Base   | 0.731    | 0.907    | 90M     |
+| GCViT-Large  | 0.734    | 0.913    | 202M    |
 
 ## Installation
 ```bash
