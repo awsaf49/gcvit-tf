@@ -25,10 +25,10 @@ class DropPath(tf.keras.layers.Layer):
             return x
         keep_prob = 1 - self.drop_prob
         shape = (tf.shape(x)[0],) + (1,) * (len(tf.shape(x)) - 1)
-        random_tensor = keep_prob + tf.random.uniform(shape, 0, 1)
+        random_tensor = keep_prob + tf.random.uniform(shape, 0, 1, dtype=x.dtype)
         random_tensor = tf.floor(random_tensor)
         if keep_prob > 0.0 and self.scale_by_keep:
-            x = (x / keep_prob) 
+            x = (x / keep_prob)
         return x * random_tensor
 
     def get_config(self):
