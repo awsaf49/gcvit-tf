@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 
-from ..layers import Stem, GCViTLevel, Identity
+from ..layers import Stem, GCViTLevel
 
                   
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
@@ -89,7 +89,7 @@ class GCViT(tf.keras.Model):
         elif global_pool == 'max':
             self.pool = tf.keras.layers.GlobalMaxPooling2D(name='pool')
         elif global_pool is None:
-            self.pool = Identity(name='pool')
+            self.pool = tf.keras.layers.Identity(name='pool')
         else:
             raise ValueError(f'Expecting pooling to be one of None/avg/max. Found: {global_pool}')
         self.head = tf.keras.layers.Dense(num_classes, name='head', activation=head_act, dtype="float32")
@@ -98,7 +98,7 @@ class GCViT(tf.keras.Model):
         self.num_classes = num_classes
         if global_pool is not None:
             self.global_pool = global_pool
-        self.head = tf.keras.layers.Dense(num_classes, name='head', activation=head_act, dtype="float32") if num_classes else Identity(name='head')
+        self.head = tf.keras.layers.Dense(num_classes, name='head', activation=head_act, dtype="float32") if num_classes else tf.keras.layers.Identity(name='head')
         super().build((1, 224, 224, in_channels)) # for head we only need info from the input channel
         
     def forward_features(self, inputs):
