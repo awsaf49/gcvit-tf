@@ -3,6 +3,7 @@ import tensorflow as tf
 from .feature import GlobalQueryGen, ReduceSize, Resizing, FitWindow
 from .block import GCViTBlock
 
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class GCViTLevel(tf.keras.layers.Layer):
     def __init__(self, depth, num_heads, window_size, keep_dims, downsample=True, mlp_ratio=4., qkv_bias=True, 

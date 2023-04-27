@@ -1,8 +1,10 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
 
+
 H_AXIS = -3
 W_AXIS = -2
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class Mlp(tf.keras.layers.Layer):
@@ -42,6 +44,7 @@ class Mlp(tf.keras.layers.Layer):
             })
         return config
 
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class SE(tf.keras.layers.Layer):
     def __init__(self, oup=None, expansion=0.25, **kwargs):
@@ -76,6 +79,7 @@ class SE(tf.keras.layers.Layer):
             'oup': self.oup,
             })
         return config
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class ReduceSize(tf.keras.layers.Layer):
@@ -118,6 +122,7 @@ class ReduceSize(tf.keras.layers.Layer):
         })
         return config
 
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class FeatExtract(tf.keras.layers.Layer):
     def __init__(self, keep_dim=False, **kwargs):
@@ -157,7 +162,8 @@ class FeatExtract(tf.keras.layers.Layer):
             "keep_dim":self.keep_dim,
         })
         return config
-    
+
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class  GlobalQueryGen(tf.keras.layers.Layer):
     """
@@ -185,7 +191,8 @@ class  GlobalQueryGen(tf.keras.layers.Layer):
             "keep_dims":self.keep_dims,
         })
         return config
-    
+
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")    
 class Resizing(tf.keras.layers.Layer):
     def __init__(self,
@@ -228,6 +235,7 @@ class Resizing(tf.keras.layers.Layer):
             'interpolation': self.interpolation,
             })
         return config
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class FitWindow(tf.keras.layers.Layer):

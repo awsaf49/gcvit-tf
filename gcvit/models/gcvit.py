@@ -48,6 +48,7 @@ NAME2CONFIG = {
                     'layer_scale': 1e-5,},
     }
 
+
 @tf.keras.utils.register_keras_serializable(package='gcvit')
 class GCViT(tf.keras.Model):
     def __init__(self, window_size, dim, depths, num_heads,
@@ -130,6 +131,7 @@ class GCViT(tf.keras.Model):
     def summary(self, input_shape=(224, 224, 3)):
         return self.build_graph(input_shape).summary()
 
+
 # load standard models
 def GCViTXXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_xxtiny'
@@ -142,6 +144,7 @@ def GCViTXXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, *
         model.load_weights(ckpt_path)
     return model
 
+
 def GCViTXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_xtiny'
     config = NAME2CONFIG[name]
@@ -152,6 +155,7 @@ def GCViTXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **
         ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
+
 
 def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_tiny'
@@ -164,6 +168,7 @@ def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **k
         model.load_weights(ckpt_path)
     return model
 
+
 def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_small'
     config = NAME2CONFIG[name]
@@ -175,6 +180,7 @@ def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **
         model.load_weights(ckpt_path)
     return model
 
+
 def GCViTBase(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_base'
     config = NAME2CONFIG[name]
@@ -185,6 +191,7 @@ def GCViTBase(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **k
         ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
+
 
 def GCViTLarge(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
     name = 'gcvit_large'

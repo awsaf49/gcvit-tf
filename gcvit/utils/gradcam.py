@@ -6,16 +6,19 @@ try:
 except:
     from tensorflow.keras.preprocessing.image import array_to_img, img_to_array
 
+
 def process_image(img, size=(224, 224)):
     img_array = tf.keras.applications.imagenet_utils.preprocess_input(img, mode='torch')
     img_array = tf.image.resize(img_array, size,)[None,]
     return img_array
+
 
 def get_gradcam_model(model):
     inp = tf.keras.Input(shape=(224, 224, 3))
     feats = model.forward_features(inp)
     preds = model.forward_head(feats)
     return tf.keras.models.Model(inp, [preds, feats])
+
 
 def get_gradcam_prediction(img, grad_model, process=True, decode=True, pred_index=None, cmap='jet', alpha=0.4):
     """Grad-CAM for a single image

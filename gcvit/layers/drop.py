@@ -13,6 +13,7 @@ class Identity(tf.keras.layers.Layer):
         config = super().get_config()
         return config
 
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class DropPath(tf.keras.layers.Layer):
     def __init__(self, drop_prob=0., scale_by_keep=True, **kwargs):
@@ -25,8 +26,10 @@ class DropPath(tf.keras.layers.Layer):
             return x
         keep_prob = 1 - self.drop_prob
         shape = (tf.shape(x)[0],) + (1,) * (len(tf.shape(x)) - 1)
-        random_tensor = keep_prob + tf.random.uniform(shape, 0, 1, dtype=x.dtype)
+        random_tensor = keep_prob + tf.random.uniform(shape, 0, 1)
         random_tensor = tf.floor(random_tensor)
+        if random_tensor.dtype != x.dtype:
+            random_tensor = tf.cast(random_tensor, dtype=x.dtype)
         if keep_prob > 0.0 and self.scale_by_keep:
             x = (x / keep_prob)
         return x * random_tensor

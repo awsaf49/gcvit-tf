@@ -1,5 +1,6 @@
 import tensorflow as tf
 
+
 def window_partition(x, window_size):
     B, H, W, C = tf.unstack(tf.shape(x), num=4)
     x = tf.reshape(x, shape=[-1, H // window_size, window_size, W // window_size, window_size, C])

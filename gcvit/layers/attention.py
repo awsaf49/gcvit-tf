@@ -1,6 +1,4 @@
 import tensorflow as tf
-import tensorflow_addons as tfa
-
 
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
