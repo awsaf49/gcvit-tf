@@ -7,9 +7,6 @@ here = path.abspath(path.dirname(__file__))
 # Get the long description from the README file
 with open(path.join(here, "README.md"), encoding="utf-8") as f:
     long_description = f.read()
-
-with open(path.join(here, 'requirements.txt')) as f:
-    install_requires = [x for x in f.read().splitlines() if len(x)]
     
 exec(open("gcvit/version.py").read())
 
@@ -44,7 +41,11 @@ setup(
     keywords="tensorflow computer_vision image classification transformer",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
-    install_requires=install_requires,
+    install_requires=[
+        "tensorflow",
+        "numpy",
+        "matplotlib",
+    ],
     python_requires=">=3.6",
     license="MIT",
 )
