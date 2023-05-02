@@ -27,6 +27,8 @@ class DropPath(tf.keras.layers.Layer):
         shape = (tf.shape(x)[0],) + (1,) * (len(tf.shape(x)) - 1)
         random_tensor = keep_prob + tf.random.uniform(shape, 0, 1)
         random_tensor = tf.floor(random_tensor)
+        if random_tensor.dtype != x.dtype:
+            random_tensor = tf.cast(random_tensor, dtype=x.dtype)
         if keep_prob > 0.0 and self.scale_by_keep:
             x = (x / keep_prob) 
         return x * random_tensor
