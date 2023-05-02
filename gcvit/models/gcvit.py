@@ -152,7 +152,8 @@ def GCViTXXTiny(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, re
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         if from_kaggle:
-            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            ckpt_path = '{}/{}/{}/{}_weights.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            print("Loading ckpt from {}".format(ckpt_path))
         else:
             ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -166,7 +167,8 @@ def GCViTXTiny(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, res
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         if from_kaggle:
-            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            ckpt_path = '{}/{}/{}/{}_weights.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            print("Loading ckpt from {}".format(ckpt_path))
         else:
             ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -180,7 +182,8 @@ def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resi
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         if from_kaggle:
-            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            ckpt_path = '{}/{}/{}/{}_weights.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            print("Loading ckpt from {}".format(ckpt_path))
         else:
             ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -194,7 +197,8 @@ def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, res
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         if from_kaggle:
-            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            ckpt_path = '{}/{}/{}/{}_weights.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            print("Loading ckpt from {}".format(ckpt_path))
         else:
             ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -208,7 +212,8 @@ def GCViTBase(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resi
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         if from_kaggle:
-            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            ckpt_path = '{}/{}/{}/{}_weights.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            print("Loading ckpt from {}".format(ckpt_path))
         else:
             ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
@@ -222,7 +227,8 @@ def GCViTLarge(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, res
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
         if from_kaggle:
-            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+            print("Loading ckpt from {}".format(ckpt_path))
+            ckpt_path = '{}/{}/{}/{}_weights.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
         else:
             ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
