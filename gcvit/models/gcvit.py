@@ -3,9 +3,22 @@ import tensorflow as tf
 
 from ..layers import Stem, GCViTLevel, Identity
 
-                  
+# Params for pretrained models                 
 BASE_URL = 'https://github.com/awsaf49/gcvit-tf/releases/download'
 TAG = 'v1.1.1'
+
+# Params for Kaggle Models (KM)
+KM_DIR = '/kaggle/input/gcvit-tf/tensorflow2'
+KM_VERSION = '1'
+NAME2TITLE = {
+    'gcvit_xxtiny': 'GCViT-XXTiny',
+    'gcvit_xtiny': 'GCViT-XTiny',
+    'gcvit_tiny': 'GCViT-Tiny',
+    'gcvit_small': 'GCViT-Small',
+    'gcvit_base': 'GCViT-Base',
+    'gcvit_large': 'GCViT-Large',
+}
+
 NAME2CONFIG = {
     'gcvit_xxtiny': {'window_size': (7, 7, 14, 7),
                     'dim': 64,
@@ -131,68 +144,86 @@ class GCViT(tf.keras.Model):
         return self.build_graph(input_shape).summary()
 
 # load standard models
-def GCViTXXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+def GCViTXXTiny(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resize_query=False, **kwargs):
     name = 'gcvit_xxtiny'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config,  **kwargs)
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        if from_kaggle:
+            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+        else:
+            ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTXTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+def GCViTXTiny(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resize_query=False, **kwargs):
     name = 'gcvit_xtiny'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config,  **kwargs)
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        if from_kaggle:
+            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+        else:
+            ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+def GCViTTiny(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resize_query=False, **kwargs):
     name = 'gcvit_tiny'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config,  **kwargs)
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        if from_kaggle:
+            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+        else:
+            ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+def GCViTSmall(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resize_query=False, **kwargs):
     name = 'gcvit_small'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        if from_kaggle:
+            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+        else:
+            ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTBase(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+def GCViTBase(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resize_query=False, **kwargs):
     name = 'gcvit_base'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        if from_kaggle:
+            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+        else:
+            ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
 
-def GCViTLarge(input_shape=(224, 224, 3), pretrain=False, resize_query=False, **kwargs):
+def GCViTLarge(input_shape=(224, 224, 3), pretrain=False, from_kaggle=False, resize_query=False, **kwargs):
     name = 'gcvit_large'
     config = NAME2CONFIG[name]
     ckpt_link = '{}/{}/{}_weights.h5'.format(BASE_URL, TAG, name)
     model = GCViT(name=name, resize_query=resize_query, **config, **kwargs)
     model(tf.random.uniform(shape=input_shape)[tf.newaxis,])
     if pretrain:
-        ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
+        if from_kaggle:
+            ckpt_path = '{}/{}/{}/{}.h5'.format(KM_DIR, NAME2TITLE[name], KM_VERSION, name)
+        else:
+            ckpt_path = tf.keras.utils.get_file('{}_weights.h5'.format(name), ckpt_link)
         model.load_weights(ckpt_path)
     return model
