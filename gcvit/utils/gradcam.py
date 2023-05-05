@@ -5,7 +5,7 @@ import tensorflow as tf
 try:
     from tensorflow.keras.utils import array_to_img
     from tensorflow.keras.utils import img_to_array
-except:
+except ImportError:
     from tensorflow.keras.preprocessing.image import array_to_img
     from tensorflow.keras.preprocessing.image import img_to_array
 
@@ -39,7 +39,7 @@ def get_gradcam_prediction(
     """Grad-CAM for a single image
 
     Args:
-        img (np.ndarray): process or raw image without batch_shape e.g. (224, 224, 3)
+        img (np.ndarray): raw image without batch_shape, e.g. (224, 224, 3)
         grad_model (tf.keras.Model): model with feature map and prediction
         process (bool, optional): imagenet pre-processing. Defaults to True.
         pred_index (int, optional): for particular calss. Defaults to None.
