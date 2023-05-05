@@ -2,7 +2,6 @@ import tensorflow as tf
 
 from .attention import WindowAttention
 from .drop import DropPath
-from .feature import FeatExtract
 from .feature import Mlp
 from .window import window_partition
 from .window import window_reverse
