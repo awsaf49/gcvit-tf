@@ -1,15 +1,24 @@
-import tensorflow as tf
 import matplotlib.cm as cm
 import numpy as np
+import tensorflow as tf
+
 try:
-    from tensorflow.keras.utils import array_to_img, img_to_array
+    from tensorflow.keras.utils import array_to_img
+    from tensorflow.keras.utils import img_to_array
 except:
-    from tensorflow.keras.preprocessing.image import array_to_img, img_to_array
+    from tensorflow.keras.preprocessing.image import array_to_img
+    from tensorflow.keras.preprocessing.image import img_to_array
+
 
 def process_image(img, size=(224, 224)):
-    img_array = tf.keras.applications.imagenet_utils.preprocess_input(img, mode='torch')
-    img_array = tf.image.resize(img_array, size,)[None,]
+    img_array = tf.keras.applications.imagenet_utils.preprocess_input(
+        img, mode="torch"
+    )
+    img_array = tf.image.resize(img_array, size,)[
+        None,
+    ]
     return img_array
+
 
 def get_gradcam_model(model):
     inp = tf.keras.Input(shape=(224, 224, 3))
@@ -17,7 +26,16 @@ def get_gradcam_model(model):
     preds = model.forward_head(feats)
     return tf.keras.models.Model(inp, [preds, feats])
 
-def get_gradcam_prediction(img, grad_model, process=True, decode=True, pred_index=None, cmap='jet', alpha=0.4):
+
+def get_gradcam_prediction(
+    img,
+    grad_model,
+    process=True,
+    decode=True,
+    pred_index=None,
+    cmap="jet",
+    alpha=0.4,
+):
     """Grad-CAM for a single image
 
     Args:
@@ -36,10 +54,12 @@ def get_gradcam_prediction(img, grad_model, process=True, decode=True, pred_inde
     if process:
         img_array = process_image(img)
     else:
-        img_array = tf.convert_to_tensor(img)[None,]
-        if img.min()!=img.max():
-            img = (img - img.min())/(img.max() - img.min())
-            img = np.uint8(img*255.0)
+        img_array = tf.convert_to_tensor(img)[
+            None,
+        ]
+        if img.min() != img.max():
+            img = (img - img.min()) / (img.max() - img.min())
+            img = np.uint8(img * 255.0)
     # get prediction
     with tf.GradientTape(persistent=True) as tape:
         preds, feats = grad_model(img_array)
@@ -65,5 +85,11 @@ def get_gradcam_prediction(img, grad_model, process=True, decode=True, pred_inde
     overlay = img + heatmap * alpha
     overlay = array_to_img(overlay)
     # decode prediction
-    preds_decode = tf.keras.applications.imagenet_utils.decode_predictions(preds.numpy())[0] if decode else preds
+    preds_decode = (
+        tf.keras.applications.imagenet_utils.decode_predictions(preds.numpy())[
+            0
+        ]
+        if decode
+        else preds
+    )
     return preds_decode, overlay
