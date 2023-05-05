@@ -156,7 +156,7 @@ class GCViT(tf.keras.Model):
             self.pool = Identity(name="pool")
         else:
             raise ValueError(
-                f"Expecting pooling to be one of None/avg/max. Found: {global_pool}"
+                f"Expecting pooling to be one of None/avg/max. Found: {global_pool}"  # noqa: E501
             )
         self.head = tf.keras.layers.Dense(
             num_classes, name="head", activation=head_act, dtype="float32"
@@ -202,7 +202,7 @@ class GCViT(tf.keras.Model):
         return x
 
     def build_graph(self, input_shape=(224, 224, 3)):
-        """https://www.kaggle.com/code/ipythonx/tf-hybrid-efficientnet-swin-transformer-gradcam"""
+        """https://www.kaggle.com/code/ipythonx/tf-hybrid-efficientnet-swin-transformer-gradcam"""  # noqa: E501
         x = tf.keras.Input(shape=input_shape)
         return tf.keras.Model(inputs=[x], outputs=self.call(x), name=self.name)
 
@@ -379,10 +379,10 @@ def GCViTLarge(
     )
     if pretrain:
         if from_kaggle:
-            print("Loading ckpt from {}".format(ckpt_path))
             ckpt_path = "{}/{}/{}/{}_weights.h5".format(
                 KM_DIR, NAME2TITLE[name], KM_VERSION, name
             )
+            print("Loading ckpt from {}".format(ckpt_path))
         else:
             ckpt_path = tf.keras.utils.get_file(
                 "{}_weights.h5".format(name), ckpt_link

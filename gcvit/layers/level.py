@@ -76,14 +76,15 @@ class GCViTLevel(tf.keras.layers.Layer):
         # pad to fit window_size
         x = self.fit_window(inputs)
         # generate global query
-        q_global = self.q_global_gen(
-            x
-        )  # (B, H, W, C)  # official impl issue: https://github.com/NVlabs/GCVit/issues/13
-        # resize query to fit key-value, but result in poor score with official weights?
+        q_global = self.q_global_gen(x)  # (B, H, W, C)
+        # - official impl issue:
+        # https://github.com/NVlabs/GCVit/issues/13
+        # TODO: resize query to fit key-value, but result in poor score
+        # with official weights?
         if self.resize_query:
-            q_global = self.resize(
-                q_global
-            )  # to avoid mismatch between feat_map and q_global: https://github.com/NVlabs/GCVit/issues/9
+            # to avoid mismatch between feat_map and q_global:
+            # https://github.com/NVlabs/GCVit/issues/9
+            q_global = self.resize(q_global)
         # feature_map -> windows -> window_attention -> feature_map
         for i, blk in enumerate(self.blocks):
             if i % 2:

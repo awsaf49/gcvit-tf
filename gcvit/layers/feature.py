@@ -196,7 +196,8 @@ class FeatExtract(tf.keras.layers.Layer):
                 pool_size=3, strides=2, padding="valid", name="pool"
             )
         # else:
-        #     self.pool = tf.keras.layers.Activation('linear', name='identity')  # hack for PyTorch nn.Identity layer ;)
+        #     # hack for PyTorch nn.Identity layer ;)
+        #     self.pool = tf.keras.layers.Activation('linear', name='identity')
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
@@ -265,9 +266,9 @@ class Resizing(tf.keras.layers.Layer):
         super().__init__(**kwargs)
 
     def call(self, inputs):
-        # tf.image.resize will always output float32 and operate more efficiently on
-        # float32 unless interpolation is nearest, in which case ouput type matches
-        # input type.
+        # tf.image.resize will always output float32 and operate more
+        # efficiently on float32 unless interpolation is nearest, in
+        # which case ouput type matches input type.
         if self.interpolation == "nearest":
             input_dtype = self.compute_dtype
         else:
