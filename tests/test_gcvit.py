@@ -2,7 +2,7 @@ import numpy as np
 import tensorflow as tf
 from skimage.data import chelsea
 
-from gcvit import GCViTTiny
+from gcvit import GCViTXXTiny
 
 
 def test_inference():
