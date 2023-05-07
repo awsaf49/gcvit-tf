@@ -1,0 +1,59 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      
+      - name: Install dependencies
+        run: pip install wheel setuptools
+      
+      - name: Build wheel
+        run: python setup.py bdist_wheel
+      
+      - name: Upload Python wheel
+        uses: actions/upload-artifact@v2
+        with:
+          name: Python wheel
+          path: ${{github.workspace}}/dist/gcvit-*.whl
+          if-no-files-found: error
+    
+  tests:
+    needs: build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      max-parallel: 10
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+        python-version: ["3.7", "3.8"]
+        tf-version: [2.8.0, 2.9.0, 2.10.0, 2.11.0]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      - name: Download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: "Python wheel"
+
+      - name: Install wheel
+        run: pip install --find-links=${{github.workspace}} gcvit
+      
+      - name: Install dependencies
+        run: pip install tensorflow pytest scikit-image
+      
+      - name: Perform tests
+        run: pytest -v tests/
