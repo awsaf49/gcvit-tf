@@ -52,10 +52,10 @@ jobs:
       - name: Install wheel
         run: |
           ls -la
-          pip install --find-links=${{github.workspace}} gcvit-
+          pip install -f ./gcvit
       
       - name: Install dependencies
-        run: pip install gcvit pytest scikit-image
+        run: pip install pytest scikit-image
       
       - name: Perform tests
         run: pytest -v tests/
