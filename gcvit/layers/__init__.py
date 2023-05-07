@@ -1,7 +1,13 @@
-from .window import window_partition, window_reverse
 from .attention import WindowAttention
-from .drop import DropPath, Identity
-from .embedding import Stem
-from .feature import Mlp, FeatExtract, ReduceSize, SE, Resizing
 from .block import GCViTBlock
+from .drop import DropPath
+from .drop import Identity
+from .embedding import Stem
+from .feature import SE
+from .feature import FeatExtract
+from .feature import Mlp
+from .feature import ReduceSize
+from .feature import Resizing
 from .level import GCViTLevel
+from .window import window_partition
+from .window import window_reverse

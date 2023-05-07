@@ -4,9 +4,17 @@ import tensorflow_addons as tfa
 H_AXIS = -3
 W_AXIS = -2
 
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class Mlp(tf.keras.layers.Layer):
-    def __init__(self, hidden_features=None, out_features=None, act_layer='gelu', dropout=0., **kwargs):
+    def __init__(
+        self,
+        hidden_features=None,
+        out_features=None,
+        act_layer="gelu",
+        dropout=0.0,
+        **kwargs,
+    ):
         super().__init__(**kwargs)
         self.hidden_features = hidden_features
         self.out_features = out_features
@@ -34,13 +42,16 @@ class Mlp(tf.keras.layers.Layer):
 
     def get_config(self):
         config = super().get_config()
-        config.update({
-            "hidden_features":self.hidden_features, 
-            "out_features":self.out_features, 
-            "act_layer":self.act_layer,
-            "dropout":self.dropout
-            })
+        config.update(
+            {
+                "hidden_features": self.hidden_features,
+                "out_features": self.out_features,
+                "act_layer": self.act_layer,
+                "dropout": self.dropout,
+            }
+        )
         return config
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class SE(tf.keras.layers.Layer):
@@ -54,11 +65,13 @@ class SE(tf.keras.layers.Layer):
         self.oup = self.oup or inp
         self.avg_pool = tfa.layers.AdaptiveAveragePooling2D(1, name="avg_pool")
         self.fc = [
-            tf.keras.layers.Dense(int(inp * self.expansion), use_bias=False, name='fc/0'),
-            tf.keras.layers.Activation('gelu', name='fc/1'),
-            tf.keras.layers.Dense(self.oup, use_bias=False, name='fc/2'),
-            tf.keras.layers.Activation('sigmoid', name='fc/3')
-            ]
+            tf.keras.layers.Dense(
+                int(inp * self.expansion), use_bias=False, name="fc/0"
+            ),
+            tf.keras.layers.Activation("gelu", name="fc/1"),
+            tf.keras.layers.Dense(self.oup, use_bias=False, name="fc/2"),
+            tf.keras.layers.Activation("sigmoid", name="fc/3"),
+        ]
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
@@ -67,15 +80,18 @@ class SE(tf.keras.layers.Layer):
         for layer in self.fc:
             x = layer(x)
         x = tf.reshape(x, (b, 1, 1, c))
-        return x*inputs
+        return x * inputs
 
     def get_config(self):
         config = super().get_config()
-        config.update({
-            'expansion': self.expansion,
-            'oup': self.oup,
-            })
+        config.update(
+            {
+                "expansion": self.expansion,
+                "oup": self.oup,
+            }
+        )
         return config
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class ReduceSize(tf.keras.layers.Layer):
@@ -85,24 +101,49 @@ class ReduceSize(tf.keras.layers.Layer):
 
     def build(self, input_shape):
         dim = input_shape[-1]
-        dim_out = dim if self.keep_dim else 2*dim
-        self.pad1 = tf.keras.layers.ZeroPadding2D(1, name='pad1')
-        self.pad2 = tf.keras.layers.ZeroPadding2D(1, name='pad2')
+        dim_out = dim if self.keep_dim else 2 * dim
+        self.pad1 = tf.keras.layers.ZeroPadding2D(1, name="pad1")
+        self.pad2 = tf.keras.layers.ZeroPadding2D(1, name="pad2")
         self.conv = [
-            tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
-            tf.keras.layers.Activation('gelu', name='conv/1'),
-            SE(name='conv/2'),
-            tf.keras.layers.Conv2D(dim, kernel_size=1, strides=1, padding='valid', use_bias=False, name='conv/3')
+            tf.keras.layers.DepthwiseConv2D(
+                kernel_size=3,
+                strides=1,
+                padding="valid",
+                use_bias=False,
+                name="conv/0",
+            ),
+            tf.keras.layers.Activation("gelu", name="conv/1"),
+            SE(name="conv/2"),
+            tf.keras.layers.Conv2D(
+                dim,
+                kernel_size=1,
+                strides=1,
+                padding="valid",
+                use_bias=False,
+                name="conv/3",
+            ),
         ]
-        self.reduction = tf.keras.layers.Conv2D(dim_out, kernel_size=3, strides=2, padding='valid', use_bias=False,
-                                                name='reduction')
-        self.norm1 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm1')  # eps like PyTorch
-        self.norm2 = tf.keras.layers.LayerNormalization(axis=-1, epsilon=1e-05, name='norm2')
+        self.reduction = tf.keras.layers.Conv2D(
+            dim_out,
+            kernel_size=3,
+            strides=2,
+            padding="valid",
+            use_bias=False,
+            name="reduction",
+        )
+        self.norm1 = tf.keras.layers.LayerNormalization(
+            axis=-1, epsilon=1e-05, name="norm1"
+        )  # eps like PyTorch
+        self.norm2 = tf.keras.layers.LayerNormalization(
+            axis=-1, epsilon=1e-05, name="norm2"
+        )
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
         x = self.norm1(inputs)
-        xr = self.pad1(x)  # if pad had weights it would've thrown error with .save_weights()
+        xr = self.pad1(
+            x
+        )  # if pad had weights it would've thrown error with .save_weights()
         for layer in self.conv:
             xr = layer(xr)
         x = x + xr
@@ -113,10 +154,13 @@ class ReduceSize(tf.keras.layers.Layer):
 
     def get_config(self):
         config = super().get_config()
-        config.update({
-            "keep_dim":self.keep_dim,
-        })
+        config.update(
+            {
+                "keep_dim": self.keep_dim,
+            }
+        )
         return config
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class FeatExtract(tf.keras.layers.Layer):
@@ -126,18 +170,34 @@ class FeatExtract(tf.keras.layers.Layer):
 
     def build(self, input_shape):
         dim = input_shape[-1]
-        self.pad1 = tf.keras.layers.ZeroPadding2D(1, name='pad1')
-        self.pad2 = tf.keras.layers.ZeroPadding2D(1, name='pad2')
+        self.pad1 = tf.keras.layers.ZeroPadding2D(1, name="pad1")
+        self.pad2 = tf.keras.layers.ZeroPadding2D(1, name="pad2")
         self.conv = [
-            tf.keras.layers.DepthwiseConv2D(kernel_size=3, strides=1, padding='valid', use_bias=False, name='conv/0'),
-            tf.keras.layers.Activation('gelu', name='conv/1'),
-            SE(name='conv/2'),
-            tf.keras.layers.Conv2D(dim, kernel_size=1, strides=1, padding='valid', use_bias=False, name='conv/3')
+            tf.keras.layers.DepthwiseConv2D(
+                kernel_size=3,
+                strides=1,
+                padding="valid",
+                use_bias=False,
+                name="conv/0",
+            ),
+            tf.keras.layers.Activation("gelu", name="conv/1"),
+            SE(name="conv/2"),
+            tf.keras.layers.Conv2D(
+                dim,
+                kernel_size=1,
+                strides=1,
+                padding="valid",
+                use_bias=False,
+                name="conv/3",
+            ),
         ]
         if not self.keep_dim:
-            self.pool = tf.keras.layers.MaxPool2D(pool_size=3, strides=2, padding='valid', name='pool')
+            self.pool = tf.keras.layers.MaxPool2D(
+                pool_size=3, strides=2, padding="valid", name="pool"
+            )
         # else:
-        #     self.pool = tf.keras.layers.Activation('linear', name='identity')  # hack for PyTorch nn.Identity layer ;)
+        #     # hack for PyTorch nn.Identity layer ;)
+        #     self.pool = tf.keras.layers.Activation('linear', name='identity')
         super().build(input_shape)
 
     def call(self, inputs, **kwargs):
@@ -145,7 +205,9 @@ class FeatExtract(tf.keras.layers.Layer):
         xr = self.pad1(x)
         for layer in self.conv:
             xr = layer(xr)
-        x = x + xr # if pad had weights it would've thrown error with .save_weights()
+        x = (
+            x + xr
+        )  # if pad had weights it would've thrown error with .save_weights()
         if not self.keep_dim:
             x = self.pad2(x)
             x = self.pool(x)
@@ -153,65 +215,67 @@ class FeatExtract(tf.keras.layers.Layer):
 
     def get_config(self):
         config = super().get_config()
-        config.update({
-            "keep_dim":self.keep_dim,
-        })
+        config.update(
+            {
+                "keep_dim": self.keep_dim,
+            }
+        )
         return config
-    
+
+
 @tf.keras.utils.register_keras_serializable(package="gcvit")
-class  GlobalQueryGen(tf.keras.layers.Layer):
+class GlobalQueryGen(tf.keras.layers.Layer):
     """
     Global query generator based on: "Hatamizadeh et al.,
     Global Context Vision Transformers <https://arxiv.org/abs/2206.09959>"
     """
+
     def __init__(self, keep_dims=False, **kwargs):
         super().__init__(**kwargs)
         self.keep_dims = keep_dims
-        
+
     def build(self, input_shape):
-        self.to_q_global = [FeatExtract(keep_dim, name=f'to_q_global/{i}') \
-                            for i, keep_dim in enumerate(self.keep_dims)]
+        self.to_q_global = [
+            FeatExtract(keep_dim, name=f"to_q_global/{i}")
+            for i, keep_dim in enumerate(self.keep_dims)
+        ]
         super().build(input_shape)
-        
+
     def call(self, inputs, **kwargs):
         x = inputs
         for layer in self.to_q_global:
             x = layer(x)
         return x
-    
+
     def get_config(self):
         config = super().get_config()
-        config.update({
-            "keep_dims":self.keep_dims,
-        })
+        config.update(
+            {
+                "keep_dims": self.keep_dims,
+            }
+        )
         return config
-    
-@tf.keras.utils.register_keras_serializable(package="gcvit")    
+
+
+@tf.keras.utils.register_keras_serializable(package="gcvit")
 class Resizing(tf.keras.layers.Layer):
-    def __init__(self,
-               height,
-               width,
-               interpolation='bilinear',
-               **kwargs):
+    def __init__(self, height, width, interpolation="bilinear", **kwargs):
         self.height = height
         self.width = width
         self.interpolation = interpolation
         super().__init__(**kwargs)
 
     def call(self, inputs):
-        # tf.image.resize will always output float32 and operate more efficiently on
-        # float32 unless interpolation is nearest, in which case ouput type matches
-        # input type.
-        if self.interpolation == 'nearest':
+        # tf.image.resize will always output float32 and operate more
+        # efficiently on float32 unless interpolation is nearest, in
+        # which case ouput type matches input type.
+        if self.interpolation == "nearest":
             input_dtype = self.compute_dtype
         else:
             input_dtype = tf.float32
         inputs = tf.cast(inputs, dtype=input_dtype)
         size = [self.height, self.width]
-        outputs = tf.image.resize(
-            inputs,
-            size=size,
-            method=self.interpolation)
+        outputs = tf.image.resize(inputs, size=size, method=self.interpolation)
         return tf.cast(outputs, self.compute_dtype)
 
     def compute_output_shape(self, input_shape):
@@ -222,16 +286,20 @@ class Resizing(tf.keras.layers.Layer):
 
     def get_config(self):
         config = super().get_config()
-        config.update({
-            'height': self.height,
-            'width': self.width,
-            'interpolation': self.interpolation,
-            })
+        config.update(
+            {
+                "height": self.height,
+                "width": self.width,
+                "interpolation": self.interpolation,
+            }
+        )
         return config
+
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
 class FitWindow(tf.keras.layers.Layer):
     "Pad feature to fit window"
+
     def __init__(self, window_size, **kwargs):
         super().__init__(**kwargs)
         self.window_size = window_size
@@ -241,15 +309,25 @@ class FitWindow(tf.keras.layers.Layer):
         # pad to multiple of window_size
         h_pad = (self.window_size - H % self.window_size) % self.window_size
         w_pad = (self.window_size - W % self.window_size) % self.window_size
-        x = tf.pad(inputs, [[0, 0],
-                            [h_pad//2, (h_pad//2 + h_pad%2)],  # padding in both directions unlike tfgcvit
-                            [w_pad//2, (w_pad//2 + w_pad%2)],
-                            [0, 0]])
+        x = tf.pad(
+            inputs,
+            [
+                [0, 0],
+                [
+                    h_pad // 2,
+                    (h_pad // 2 + h_pad % 2),
+                ],  # padding in both directions unlike tfgcvit
+                [w_pad // 2, (w_pad // 2 + w_pad % 2)],
+                [0, 0],
+            ],
+        )
         return x
 
     def get_config(self):
         config = super().get_config()
-        config.update({
-            'window_size': self.window_size,
-            })
+        config.update(
+            {
+                "window_size": self.window_size,
+            }
+        )
         return config
