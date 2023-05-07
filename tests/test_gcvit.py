@@ -14,7 +14,7 @@ def test_inference():
         None,
     ]
 
-    model = GCViTTiny(pretrain=True)
+    model = GCViTXXTiny(pretrain=True)
 
     pred = model(img).numpy()
     result = tf.keras.applications.imagenet_utils.decode_predictions(pred, top=5)[0]
