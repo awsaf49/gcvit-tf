@@ -44,7 +44,7 @@ def test_feature_extraction():
         None,
     ]
 
-    model = GCViTTiny(pretrain=True)
+    model = GCViTXXTiny(pretrain=True)
     model.reset_classifier(num_classes=0, head_act=None)
     feature = model(img)
     shape_ = feature.shape
