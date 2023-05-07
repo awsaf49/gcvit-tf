@@ -100,6 +100,13 @@ Feature map:
 (None, 7, 7, 512)
 ```
 
+## Kaggle Models
+These pre-trained models can also be loaded using [Kaggle Models](https://www.kaggle.com/models/awsaf49/gcvit-tf). Setting `from_kaggle=True` will enforce model to load weights from Kaggle Models with downloading, thus can be used without internet in Kaggle.
+```py
+from gcvit import GCViTTiny
+model = GCViTTiny(pretrain=True, from_kaggle=True)
+```
+
 ## Live-Demo
 * For live demo on Image Classification & Grad-CAM, with **ImageNet** weights, click <a target="_blank" href="https://huggingface.co/spaces/awsaf49/gcvit-tf"><img src="https://img.shields.io/badge/Try%20on-Gradio-orange"></a> powered by 🤗 Space and Gradio. here's an example,
 
