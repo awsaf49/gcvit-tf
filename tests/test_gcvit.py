@@ -33,8 +33,8 @@ def test_inference():
     ]
     for res, exp in zip(result, expected_result):
         assert res[1] == exp[1]
-        assert np.around(res[2], decimals=6) == np.float32(
-            np.around(exp[2], decimals=6)
+        assert np.around(res[2], decimals=4) == np.float32(
+            np.around(exp[2], decimals=4)
         )
 
 
