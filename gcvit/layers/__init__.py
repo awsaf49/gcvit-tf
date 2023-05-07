@@ -9,5 +9,6 @@ from .feature import Mlp
 from .feature import ReduceSize
 from .feature import Resizing
 from .level import GCViTLevel
+from .pooling import AdaptiveAveragePooling2D
 from .window import window_partition
 from .window import window_reverse

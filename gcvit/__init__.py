@@ -5,4 +5,5 @@ from .models import GCViTSmall
 from .models import GCViTTiny
 from .models import GCViTXTiny
 from .models import GCViTXXTiny
+from .utils import conv_utils
 from .version import __version__
