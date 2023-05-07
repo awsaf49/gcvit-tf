@@ -13,9 +13,14 @@
 # limitations under the License.
 # ==============================================================================
 
+from typing import Callable
+from typing import Iterable
+from typing import Union
+
 import tensorflow as tf
-from tensorflow.keras.utils import conv_utils
-from typing import Union, Callable, Iterable
+
+from ..utils import normalize_data_format
+from ..utils import normalize_tuple
 
 
 @tf.keras.utils.register_keras_serializable(package="gcvit")
@@ -29,8 +34,8 @@ class AdaptivePooling2D(tf.keras.layers.Layer):
 
     Args:
       reduce_function: The reduction method to apply, e.g. `tf.reduce_max`.
-      output_size: An integer or tuple/list of 2 integers specifying (pooled_rows, pooled_cols).
-        The new size of output channels.
+      output_size: An integer or tuple/list of 2 integers specifying
+        (pooled_rows, pooled_cols). The new size of output channels.
       data_format: A string,
         one of `channels_last` (default) or `channels_first`.
         The ordering of the dimensions in the inputs.
@@ -47,9 +52,9 @@ class AdaptivePooling2D(tf.keras.layers.Layer):
         data_format=None,
         **kwargs,
     ):
-        self.data_format = conv_utils.normalize_data_format(data_format)
+        self.data_format = normalize_data_format(data_format)
         self.reduce_function = reduce_function
-        self.output_size = conv_utils.normalize_tuple(output_size, 2, "output_size")
+        self.output_size = normalize_tuple(output_size, 2, "output_size")
         super().__init__(**kwargs)
 
     def call(self, inputs, *args):
