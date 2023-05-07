@@ -122,9 +122,9 @@ Here is grad-cam result after training on Flower Classification Dataset,
 
 
 ## To Do
-- [ ] Remove `tensorflow_addons`
 - [ ] Segmentation Pipeline
 - [ ] Support for `Kaggle Models`
+- [x] Remove `tensorflow_addons`
 - [x] New updated weights have been added.
 - [x] Working training example in Colab & Kaggle.
 - [x] GradCAM showcase.

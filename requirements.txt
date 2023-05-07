@@ -1,5 +1,4 @@
-# tensorflow==2.4.1
-tensorflow_addons
+typing
 gradio
 numpy
 matplotlib

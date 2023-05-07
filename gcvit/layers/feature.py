@@ -1,5 +1,6 @@
 import tensorflow as tf
-import tensorflow_addons as tfa
+
+from .pooling import AdaptiveAveragePooling2D
 
 H_AXIS = -3
 W_AXIS = -2
@@ -63,7 +64,7 @@ class SE(tf.keras.layers.Layer):
     def build(self, input_shape):
         inp = input_shape[-1]
         self.oup = self.oup or inp
-        self.avg_pool = tfa.layers.AdaptiveAveragePooling2D(1, name="avg_pool")
+        self.avg_pool = AdaptiveAveragePooling2D(1, name="avg_pool")
         self.fc = [
             tf.keras.layers.Dense(
                 int(inp * self.expansion), use_bias=False, name="fc/0"
