@@ -1,4 +1,3 @@
-tensorflow
 tensorflow_addons
 gradio
 numpy

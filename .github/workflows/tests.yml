@@ -53,7 +53,7 @@ jobs:
         run: pip install --find-links=${{github.workspace}} gcvit
       
       - name: Install dependencies
-        run: pip install pytest scikit-image
+        run: pip install tensorflow pytest scikit-image
       
       - name: Perform tests
         run: pytest -v tests/
