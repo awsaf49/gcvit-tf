@@ -101,7 +101,7 @@ Feature map:
 ```
 
 ## Kaggle Models
-These pre-trained models can also be loaded using [Kaggle Models](https://www.kaggle.com/models/awsaf49/gcvit-tf). Setting `from_kaggle=True` will enforce model to load weights from Kaggle Models with downloading, thus can be used without internet in Kaggle.
+These pre-trained models can also be loaded using [Kaggle Models](https://www.kaggle.com/models/awsaf49/gcvit-tf). Setting `from_kaggle=True` will enforce model to load weights from Kaggle Models without downloading, thus can be used without internet in Kaggle.
 ```py
 from gcvit import GCViTTiny
 model = GCViTTiny(pretrain=True, from_kaggle=True)
@@ -123,7 +123,7 @@ Here is grad-cam result after training on Flower Classification Dataset,
 
 ## To Do
 - [ ] Segmentation Pipeline
-- [ ] Support for `Kaggle Models`
+- [x] Support for `Kaggle Models`
 - [x] Remove `tensorflow_addons`
 - [x] New updated weights have been added.
 - [x] Working training example in Colab & Kaggle.
