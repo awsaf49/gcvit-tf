@@ -13,12 +13,12 @@ TAG = "v1.1.1"
 KM_DIR = "/kaggle/input/gcvit-tf/tensorflow2"
 KM_VERSION = "1"
 NAME2TITLE = {
-    "gcvit_xxtiny": "GCViT-XXTiny",
-    "gcvit_xtiny": "GCViT-XTiny",
-    "gcvit_tiny": "GCViT-Tiny",
-    "gcvit_small": "GCViT-Small",
-    "gcvit_base": "GCViT-Base",
-    "gcvit_large": "GCViT-Large",
+    "gcvit_xxtiny": "gcvit-xxtiny",
+    "gcvit_xtiny": "gcvit-xtiny",
+    "gcvit_tiny": "gcvit-tiny",
+    "gcvit_small": "gcvit-small",
+    "gcvit_base": "gcvit-base",
+    "gcvit_large": "gcvit-large",
 }
 
 NAME2CONFIG = {
