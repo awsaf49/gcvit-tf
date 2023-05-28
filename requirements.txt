@@ -1,4 +1,3 @@
 typing
-gradio
 numpy
 matplotlib
