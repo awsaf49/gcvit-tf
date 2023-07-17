@@ -62,6 +62,12 @@ Load model using following codes,
 from gcvit import GCViTTiny
 model = GCViTTiny(pretrain=True)
 ```
+
+Any input size other than **224x224**,
+```py
+from gcvit import GCViTTiny
+model = GCViTTiny(input_shape=(512,512,3), pretrain=True, resize_query=True)
+```
 Simple code to check model's prediction,
 ```py
 from skimage.data import chelsea
