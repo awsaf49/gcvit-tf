@@ -26,6 +26,11 @@ This library implements <b>GCViT</b> using Tensorflow 2.0 specifically in <code>
 * **3 Sept 2022** : Annotated [kaggle-notebook](https://www.kaggle.com/code/awsaf49/gcvit-global-context-vision-transformer) based on this project won [Kaggle ML Research Spotlight: August 2022](https://www.kaggle.com/discussions/general/349817).
 * **19 Aug 2022** : This project got acknowledged by [Official](https://github.com/NVlabs/GCVit) repo [here](https://github.com/NVlabs/GCVit#third-party-implementations-and-resources)
 
+## Paper Implementation & Explanation **
+I have explained the GCViT paper in a Kaggle notebook **[GCViT: Global Context Vision Transformer](https://www.kaggle.com/code/awsaf49/gcvit-global-context-vision-transformer)**, which also includes a detailed implementation of the model from scratch. The notebook provides a comprehensive explanation of each part of the model, with intuition.
+
+Do check it out, especially if you are interested in learning more about GCViT or implementing it yourself. Note that this notebook has won the **Kaggle ML Research Award 2022.**
+
 ## Model
 * Architecture:
 
