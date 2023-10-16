@@ -64,9 +64,7 @@ class SE(tf.keras.layers.Layer):
     def build(self, input_shape):
         inp = input_shape[-1]
         self.oup = self.oup or inp
-        self.avg_pool = AdaptiveAveragePooling2D(
-            output_size=(1, 1), name="avg_pool"
-        )
+        self.avg_pool = AdaptiveAveragePooling2D(1, name="avg_pool")
         self.fc = [
             tf.keras.layers.Dense(
                 int(inp * self.expansion), use_bias=False, name="fc/0"
