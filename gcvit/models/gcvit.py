@@ -227,7 +227,7 @@ class GCViT(tf.keras.Model):
                 "resize_query": self.resize_query,
                 "global_pool": self.global_pool,
                 "num_classes": self.num_classes,
-                "head_act": self.head_act
+                "head_act": self.head_act,
             }
         )
         return config
