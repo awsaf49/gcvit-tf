@@ -50,7 +50,7 @@ class WindowAttention(tf.keras.layers.Layer):
             self.proj_dropout, name="proj_drop"
         )
         self.softmax = tf.keras.layers.Activation("softmax", name="softmax")
-        self.relative_position_index = self.get_relative_position_index()
+        # self.relative_position_index = self.get_relative_position_index()
         super().build(input_shape)
 
     def get_relative_position_index(self):
@@ -101,7 +101,7 @@ class WindowAttention(tf.keras.layers.Layer):
         attn = q @ tf.transpose(k, perm=[0, 1, 3, 2])
         relative_position_bias = tf.gather(
             self.relative_position_bias_table,
-            tf.reshape(self.relative_position_index, shape=[-1]),
+            tf.reshape(self.get_relative_position_index(), shape=[-1]),
         )
         relative_position_bias = tf.reshape(
             relative_position_bias,
