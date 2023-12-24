@@ -33,7 +33,7 @@ class WindowAttention(tf.keras.layers.Layer):
             dim * self.qkv_size, use_bias=self.qkv_bias, name="qkv"
         )
         self.relative_position_bias_table = self.add_weight(
-            "relative_position_bias_table",
+            name="relative_position_bias_table",
             shape=[
                 (2 * self.window_size[0] - 1) * (2 * self.window_size[1] - 1),
                 self.num_heads,
