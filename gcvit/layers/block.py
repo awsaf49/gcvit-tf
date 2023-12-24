@@ -65,14 +65,14 @@ class GCViTBlock(tf.keras.layers.Layer):
         )
         if self.layer_scale is not None:
             self.gamma1 = self.add_weight(
-                "gamma1",
+                name="gamma1",
                 shape=[C],
                 initializer=tf.keras.initializers.Constant(self.layer_scale),
                 trainable=True,
                 dtype=self.dtype,
             )
             self.gamma2 = self.add_weight(
-                "gamma2",
+                name="gamma2",
                 shape=[C],
                 initializer=tf.keras.initializers.Constant(self.layer_scale),
                 trainable=True,

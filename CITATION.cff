@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Rahman"
+  given-names: "Md Awsafur"
+title: "Tensorflow 2.0 Implementation of GCViT: Global Context Vision Transformer"
+version: 1.1.5
+date-released: 2020-07-20
+url: "https://awsaf49.github.io/gcvit-tf"
