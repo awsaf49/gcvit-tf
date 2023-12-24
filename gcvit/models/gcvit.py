@@ -142,7 +142,7 @@ class GCViT(tf.keras.Model):
                 path_drop=path_drop,
                 layer_scale=layer_scale,
                 resize_query=resize_query,
-                name=f"levels/{i}",
+                name=f"levels_{i}",
             )
             self.levels.append(level)
         self.norm = tf.keras.layers.LayerNormalization(
@@ -227,7 +227,7 @@ class GCViT(tf.keras.Model):
                 "resize_query": self.resize_query,
                 "global_pool": self.global_pool,
                 "num_classes": self.num_classes,
-                "head_act": self.head_act
+                "head_act": self.head_act,
             }
         )
         return config

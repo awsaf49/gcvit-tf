@@ -67,11 +67,11 @@ class SE(tf.keras.layers.Layer):
         self.avg_pool = AdaptiveAveragePooling2D(1, name="avg_pool")
         self.fc = [
             tf.keras.layers.Dense(
-                int(inp * self.expansion), use_bias=False, name="fc/0"
+                int(inp * self.expansion), use_bias=False, name="fc_0"
             ),
-            tf.keras.layers.Activation("gelu", name="fc/1"),
-            tf.keras.layers.Dense(self.oup, use_bias=False, name="fc/2"),
-            tf.keras.layers.Activation("sigmoid", name="fc/3"),
+            tf.keras.layers.Activation("gelu", name="fc_1"),
+            tf.keras.layers.Dense(self.oup, use_bias=False, name="fc_2"),
+            tf.keras.layers.Activation("sigmoid", name="fc_3"),
         ]
         super().build(input_shape)
 
@@ -111,17 +111,17 @@ class ReduceSize(tf.keras.layers.Layer):
                 strides=1,
                 padding="valid",
                 use_bias=False,
-                name="conv/0",
+                name="conv_0",
             ),
-            tf.keras.layers.Activation("gelu", name="conv/1"),
-            SE(name="conv/2"),
+            tf.keras.layers.Activation("gelu", name="conv_1"),
+            SE(name="conv_2"),
             tf.keras.layers.Conv2D(
                 dim,
                 kernel_size=1,
                 strides=1,
                 padding="valid",
                 use_bias=False,
-                name="conv/3",
+                name="conv_3",
             ),
         ]
         self.reduction = tf.keras.layers.Conv2D(
@@ -179,17 +179,17 @@ class FeatExtract(tf.keras.layers.Layer):
                 strides=1,
                 padding="valid",
                 use_bias=False,
-                name="conv/0",
+                name="conv_0",
             ),
-            tf.keras.layers.Activation("gelu", name="conv/1"),
-            SE(name="conv/2"),
+            tf.keras.layers.Activation("gelu", name="conv_1"),
+            SE(name="conv_2"),
             tf.keras.layers.Conv2D(
                 dim,
                 kernel_size=1,
                 strides=1,
                 padding="valid",
                 use_bias=False,
-                name="conv/3",
+                name="conv_3",
             ),
         ]
         if not self.keep_dim:
@@ -237,7 +237,7 @@ class GlobalQueryGen(tf.keras.layers.Layer):
 
     def build(self, input_shape):
         self.to_q_global = [
-            FeatExtract(keep_dim, name=f"to_q_global/{i}")
+            FeatExtract(keep_dim, name=f"to_q_global_{i}")
             for i, keep_dim in enumerate(self.keep_dims)
         ]
         super().build(input_shape)

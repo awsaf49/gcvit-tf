@@ -59,7 +59,7 @@ class GCViTLevel(tf.keras.layers.Layer):
                 attn_drop=self.attn_drop,
                 path_drop=path_drop[i],
                 layer_scale=self.layer_scale,
-                name=f"blocks/{i}",
+                name=f"blocks_{i}",
             )
             for i in range(self.depth)
         ]
